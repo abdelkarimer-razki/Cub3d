@@ -8,6 +8,7 @@
 # include<mlx.h>
 # define white 16777215
 # define yellow 16776960
+# define degre 0.0174533
 
 int karim;
 int colors[9];

@@ -22,13 +22,13 @@ void	ray_to_3d(t_mlxk *window, int length)
 	int x;
 	int lineA;
 
-	lineH = (int)((50 * 500) / (length * 3));
+	lineH = (int)((50 * 500) / (length));
 	if (lineH > 500)
 		lineH = 500;
 	y = (500 - lineH) / 2;
 	x = 0;
-	lineA = (10 * 500) / (length * 3);
-	while (y < lineH + (1500 - lineH) / 2)
+	lineA = 17;
+	while (y < lineH + (500 - lineH) / 2)
 	{
 		x = karim;
 		while (x < lineA + karim)
@@ -61,7 +61,7 @@ void	ray_to_3d(t_mlxk *window, int length)
 void vision(t_mlxk *window, int length, double angle)
 {
 	int i;
-	angle--;
+	angle-=0.523599;
 	i = -1;
 	int		map[64] = 
 	{
@@ -78,10 +78,10 @@ void vision(t_mlxk *window, int length, double angle)
 	window->addr = mlx_get_data_addr(window->img, &window->bits_per_pixel, &window->line_length,
 								&window->endian);
 	drawmap(map, window);
-	while (++i < 40)
+	while (++i < 60)
 	{
 		dda(window, length, angle);
-		angle += 0.05;
+		angle += degre;
 	}
 	mlx_put_image_to_window(window->mlx, window->mlx_win, window->img, 0, 0);
 }

@@ -20,7 +20,7 @@ int	controlplayer(int key, t_mlxk *params)
 		exit(0);
 	if (key == 2)
 	{
-		params->angle += 0.05;
+		params->angle += degre;
 		vision(params, 0, params->angle);
 	}
 	else if (key == 13)
@@ -43,7 +43,7 @@ int	controlplayer(int key, t_mlxk *params)
 	}
 	else if (key == 0)
 	{
-		params->angle -= 0.05;
+		params->angle -= degre;
 		vision(params, 0, params->angle);
 	}
 	return 0;
