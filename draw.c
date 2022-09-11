@@ -15,15 +15,86 @@
 #include <math.h>
 #include <stdio.h>
 
-void vision(t_mlxk window, int length, double angle)
+void	ray_to_3d(t_mlxk *window, int length)
+{
+	int lineH;
+	int	y;
+	int x;
+	int lineA;
+
+	lineH = (int)((50 * 500) / (length * 3));
+	if (lineH > 500)
+		lineH = 500;
+	y = (500 - lineH) / 2;
+	x = 0;
+	lineA = (10 * 500) / (length * 3);
+	while (y < lineH + (1500 - lineH) / 2)
+	{
+		x = karim;
+		while (x < lineA + karim)
+		{
+			if (lineH <= 500 && lineH >= 445)
+				my_mlx_pixel_put(window, x, y, colors[0]);
+			if (lineH <= 444 && lineH >= 389)
+				my_mlx_pixel_put(window, x, y, colors[1]);
+			if (lineH <= 388 && lineH >= 333)
+				my_mlx_pixel_put(window, x, y, colors[2]);
+			if (lineH <= 332 && lineH >= 277)
+				my_mlx_pixel_put(window, x, y, colors[3]);
+			if (lineH <= 276 && lineH >= 221)
+				my_mlx_pixel_put(window, x, y, colors[4]);
+			if (lineH <= 220 && lineH >= 165)
+				my_mlx_pixel_put(window, x, y, colors[5]);
+			if (lineH <= 164 && lineH >= 109)
+				my_mlx_pixel_put(window, x, y, colors[6]);
+			if (lineH <= 108 && lineH >= 53)
+				my_mlx_pixel_put(window, x, y, colors[7]);
+			if (lineH <= 52)
+				my_mlx_pixel_put(window, x, y, colors[8]);		
+			x++;
+		}
+		y++;
+	}
+	karim += lineA;
+}
+
+void vision(t_mlxk *window, int length, double angle)
 {
 	int i;
-	angle = angle - 1;
+	angle--;
 	i = -1;
-	while (++i < 20)
+	int		map[64] = 
+	{
+		1, 1, 1, 1, 1, 1, 1, 1,
+		1, 0, 1, 0, 1, 0, 0, 1,
+		1, 0, 1, 0, 1, 0, 1, 1,
+		1, 0, 0, 0, 1, 0, 1, 1,
+		1, 0, 1, 0, 1, 0, 0, 1,
+		1, 0, 0, 0, 0, 1, 0, 1,
+		1, 0, 1, 1, 0, 0, 0, 1,
+		1, 1, 1, 1, 1, 1, 1, 1
+	};
+	window->img = mlx_new_image(window->mlx, 1500, 500);
+	window->addr = mlx_get_data_addr(window->img, &window->bits_per_pixel, &window->line_length,
+								&window->endian);
+	drawmap(map, window);
+	while (++i < 40)
 	{
 		dda(window, length, angle);
-		angle += 0.1;
+		angle += 0.05;
+	}
+	mlx_put_image_to_window(window->mlx, window->mlx_win, window->img, 0, 0);
+}
+
+void	my_mlx_pixel_put(t_mlxk *data, int x, int y, int color)
+{
+	char	*dst;
+
+	if ((x > 0 && x < 1500) && (y > 0 && y < 500))
+	{
+		dst = data->addr + (y * data->line_length
+				+ x * (data->bits_per_pixel / 8));
+		*(unsigned int *)dst = color;
 	}
 }
 
@@ -31,10 +102,10 @@ int	hitwall(int *map, int x1, int y1)
 {
 	if (map[(x1 / 62 + (8 * (y1 / 62)))] == 1)
 		return (1);
-	return (0);
+	return (0); 
 }
 
-void	dda(t_mlxk window, int length, double angle)
+void	dda(t_mlxk *window, int length, double angle)
 {
 	double	x1;
 	double	y1;
@@ -52,21 +123,22 @@ void	dda(t_mlxk window, int length, double angle)
 		1, 1, 1, 1, 1, 1, 1, 1
 	};
 
-	x0 = window.x0;
-	y0 = window.y0;
-	x1 = window.x0 + length * cos(angle);
-	y1 = window.y0 +length * sin(angle);
+	x0 = window->x0;
+	y0 = window->y0;
+	x1 = window->x0 + length * cos(angle);
+	y1 = window->y0 +length * sin(angle);
 	while (hitwall(map, (int)x1, (int)y1) == 0)
 	{
 		length++;
-		x1 = window.x0 + length * cos(angle);
-		y1 = window.y0 +length * sin(angle);
+		x1 = window->x0 + length * cos(angle);
+		y1 = window->y0 +length * sin(angle);
 	}
+	ray_to_3d(window, length);
 	if (abs((int)x1 - (int)x0) > abs((int)y1 - (int)y0))
 	{
 		while ((int)x0 != (int)x1)
 		{
-			mlx_pixel_put(window.mlx, window.mlx_win, x0, y0, white);
+			my_mlx_pixel_put(window, x0, y0, white);
 			y0 += (y1 - y0) / fabs(x1 - x0);
 			x0 += (x1 - x0) / fabs(x1 - x0);
 		}
@@ -75,14 +147,14 @@ void	dda(t_mlxk window, int length, double angle)
 	{
 		while ((int)y0 != (int)y1)
 		{
-			mlx_pixel_put(window.mlx, window.mlx_win, (int)x0, (int)y0, white);
+			my_mlx_pixel_put(window, (int)x0, (int)y0, white);
 			y0 += (y1 - y0) / fabs(y1 - y0);
 			x0 += (x1 - x0) / fabs(y1 - y0);
 		}
 	}
 }
 
-void	drawmap(int *map, t_mlxk window)
+void	drawmap(int *map, t_mlxk *window)
 {
 	int	i;
 	int	c = -1;
@@ -99,13 +171,13 @@ void	drawmap(int *map, t_mlxk window)
 				c = k * 62;
 				while (c < (k + 1) * 62)
 				{
-					mlx_pixel_put(window.mlx, window.mlx_win, c, j * 62, yellow);
+					my_mlx_pixel_put(window, c, j * 62, yellow);
 					c++;
 				}
 				c = j * 62;
 				while (c < (j + 1) * 62)
 				{
-					mlx_pixel_put(window.mlx, window.mlx_win, k * 62, c, yellow);
+					my_mlx_pixel_put(window, k * 62, c, yellow);
 					c++;
 				}
 			}
@@ -116,7 +188,7 @@ void	drawmap(int *map, t_mlxk window)
 					c = j * 62;
 					while (c < (j + 1) * 62)
 					{
-						mlx_pixel_put(window.mlx, window.mlx_win, k * 62, c, yellow);
+						my_mlx_pixel_put(window, k * 62, c, yellow);
 						c++;
 					}
 				}
@@ -125,7 +197,7 @@ void	drawmap(int *map, t_mlxk window)
 					c = k * 62;
 					while (c < (k + 1) * 62)
 					{
-						mlx_pixel_put(window.mlx, window.mlx_win, c, j * 62, yellow);
+						my_mlx_pixel_put(window, c, j * 62, yellow);
 						c++;
 					}
 				}

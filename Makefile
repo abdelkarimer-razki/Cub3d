@@ -26,11 +26,11 @@ OBJS = ${FILES:.c=.o}
 all:$(NAME)
 
 $(NAME): $(OBJS) $(INCLUDE)
-	@$(CC) $(CFLAGS) $(OBJS) -I $(INCLUDE) -o $(NAME) -lmlx -framework OpenGL -framework AppKit
+	@$(CC) $(CFLAGS) $(OBJS) -I $(INCLUDE) -o $(NAME) -lmlx -framework OpenGL -framework AppKit -static-libsan -fsanitize=address
 	@echo "SUUUUUUUUIIIIIII"
 
 %.o : %.c $(INCLUDE)
-	gcc  $(CFLAGS) -o $@ -c $<
+	@gcc  $(CFLAGS) -o $@ -c $<
 
 clean:
 	@rm -f ${OBJS}

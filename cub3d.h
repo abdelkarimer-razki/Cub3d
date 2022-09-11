@@ -9,6 +9,8 @@
 # define white 16777215
 # define yellow 16776960
 
+int karim;
+int colors[9];
 typedef struct mlx
 {
 	void	*mlx;
@@ -23,10 +25,12 @@ typedef struct mlx
 	int		bits_per_pixel;
 	int		line_length;
 	int		endian;
+	int		rest;
 }	t_mlxk;
 
-void	dda(t_mlxk window, int length, double angle);
-void	drawmap(int *map, t_mlxk window);
-void	vision(t_mlxk window, int length, double angle);
+void	dda(t_mlxk *window, int length, double angle);
+void	drawmap(int *map, t_mlxk *window);
+void	vision(t_mlxk *window, int length, double angle);
 int		hitwall(int *map, int x1, int y1);
+void	my_mlx_pixel_put(t_mlxk *data, int x, int y, int color);
 #endif
