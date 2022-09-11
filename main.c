@@ -14,8 +14,11 @@ int	controlplayer(int key, t_mlxk *params)
 		1, 1, 1, 1, 1, 1, 1, 1
 	};
 	karim = 500;
-	mlx_destroy_image(params->mlx, params->img);
-	mlx_clear_window(params->mlx, params->mlx_win);
+	if (key == (2 | 13 | 1 | 0))
+	{
+		mlx_destroy_image(params->mlx, params->img);
+		mlx_clear_window(params->mlx, params->mlx_win);
+	}
 	if (key == 53)
 		exit(0);
 	if (key == 2)

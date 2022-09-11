@@ -9,6 +9,7 @@
 # define white 16777215
 # define yellow 16776960
 # define degre 0.0174533
+# define angleV 0.523599
 
 int karim;
 int colors[9];
@@ -29,7 +30,7 @@ typedef struct mlx
 	int		rest;
 }	t_mlxk;
 
-void	dda(t_mlxk *window, int length, double angle);
+void	dda(t_mlxk *window, float length, double angle, int i);
 void	drawmap(int *map, t_mlxk *window);
 void	vision(t_mlxk *window, int length, double angle);
 int		hitwall(int *map, int x1, int y1);

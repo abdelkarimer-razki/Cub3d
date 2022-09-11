@@ -15,14 +15,17 @@
 #include <math.h>
 #include <stdio.h>
 
-void	ray_to_3d(t_mlxk *window, int length)
+void	ray_to_3d(t_mlxk *window, float length, int i)
 {
 	int lineH;
 	int	y;
 	int x;
 	int lineA;
-
-	lineH = (int)((50 * 500) / (length));
+	if (i <= 29)
+		length *= cos(angleV - (((i % 30) * degre)));
+	else if(i >= 30)
+		length *= cos((i % 30) * degre);
+	lineH = 50 * 500 / length;
 	if (lineH > 500)
 		lineH = 500;
 	y = (500 - lineH) / 2;
@@ -61,7 +64,7 @@ void	ray_to_3d(t_mlxk *window, int length)
 void vision(t_mlxk *window, int length, double angle)
 {
 	int i;
-	angle-=0.523599;
+	angle-=angleV;
 	i = -1;
 	int		map[64] = 
 	{
@@ -80,7 +83,7 @@ void vision(t_mlxk *window, int length, double angle)
 	drawmap(map, window);
 	while (++i < 60)
 	{
-		dda(window, length, angle);
+		dda(window, length, angle, i);
 		angle += degre;
 	}
 	mlx_put_image_to_window(window->mlx, window->mlx_win, window->img, 0, 0);
@@ -105,7 +108,7 @@ int	hitwall(int *map, int x1, int y1)
 	return (0); 
 }
 
-void	dda(t_mlxk *window, int length, double angle)
+void	dda(t_mlxk *window, float length, double angle, int i)
 {
 	double	x1;
 	double	y1;
@@ -129,12 +132,12 @@ void	dda(t_mlxk *window, int length, double angle)
 	y1 = window->y0 +length * sin(angle);
 	while (hitwall(map, (int)x1, (int)y1) == 0)
 	{
-		length++;
+		length+=0.01;
 		x1 = window->x0 + length * cos(angle);
 		y1 = window->y0 +length * sin(angle);
 	}
-	ray_to_3d(window, length);
-	if (abs((int)x1 - (int)x0) > abs((int)y1 - (int)y0))
+	ray_to_3d(window, length, i);
+	if (fabs(x1 - x0) > fabs(y1 - y0))
 	{
 		while ((int)x0 != (int)x1)
 		{
@@ -147,7 +150,7 @@ void	dda(t_mlxk *window, int length, double angle)
 	{
 		while ((int)y0 != (int)y1)
 		{
-			my_mlx_pixel_put(window, (int)x0, (int)y0, white);
+			my_mlx_pixel_put(window, x0, y0, white);
 			y0 += (y1 - y0) / fabs(y1 - y0);
 			x0 += (x1 - x0) / fabs(y1 - y0);
 		}
