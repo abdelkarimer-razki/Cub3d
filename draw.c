@@ -1,19 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   draw2.c                                            :+:      :+:    :+:   */
+/*   draw.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aer-razk <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: bboulhan <bboulhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 15:47:04 by aer-razk          #+#    #+#             */
-/*   Updated: 2022/02/23 15:47:06 by aer-razk         ###   ########.fr       */
+/*   Updated: 2022/09/11 21:35:53 by bboulhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "mlx.h"
-#include "cub3d.h"
-#include <math.h>
-#include <stdio.h>
+#include "cub3D.h"
 
 void vision(t_mlxk window, int length, double angle)
 {
@@ -27,10 +24,12 @@ void vision(t_mlxk window, int length, double angle)
 	}
 }
 
-int	hitwall(int *map, int x1, int y1)
+int	hitwall(t_map *map, int x1, int y1)
 {
-	if (map[(x1 / 62 + (8 * (y1 / 62)))] == 1)
+	if (map->table[y1 / care][x1 / care] == '1')
 		return (1);
+	// if (map[(x1 / care + (8 * (y1 / care)))] == 1)
+	// 	return (1);
 	return (0);
 }
 
@@ -82,57 +81,132 @@ void	dda(t_mlxk window, int length, double angle)
 	}
 }
 
-void	drawmap(int *map, t_mlxk window)
+void drawmap(t_mlxk window, t_map *map)
 {
 	int	i;
-	int	c = -1;
-	int j = 0;
+	int	j;
 	int	k;
+	int	c;
+
+	c = 0;
+	k = 0;
 	i = 0;
-	while (j < 8)
+	j = 0;
+
+	while (map->table[i])
 	{
 		k = 0;
-		while (i < 8 * (j + 1))
+		while (map->table[i][j])
 		{
-			if (map[i] == 1)
+			if (map->table[i][j] == ' ')
 			{
-				c = k * 62;
-				while (c < (k + 1) * 62)
-				{
-					mlx_pixel_put(window.mlx, window.mlx_win, c, j * 62, yellow);
-					c++;
-				}
-				c = j * 62;
-				while (c < (j + 1) * 62)
-				{
-					mlx_pixel_put(window.mlx, window.mlx_win, k * 62, c, yellow);
-					c++;
-				}
+			}
+			else if (map->table[i][j] == '1')
+			{
+				c = k * care ;
+					while (c < (k + 1) * care)
+					{
+						mlx_pixel_put(window.mlx, window.mlx_win, c, j * care, yellow);
+						c++;
+					}
+					c = j * care;
+					while (c < (j + 1) * care)
+					{
+						mlx_pixel_put(window.mlx, window.mlx_win, k * care, c, yellow);
+						c++;
+					}
 			}
 			else
 			{
-				if (map[i - 1] == 1)
-				{
-					c = j * 62;
-					while (c < (j + 1) * 62)
+				if (map->table[i][j - 1] == '1')
 					{
-						mlx_pixel_put(window.mlx, window.mlx_win, k * 62, c, yellow);
-						c++;
+						c = j * care;
+						while (c < (j + 1) * care)
+						{
+							mlx_pixel_put(window.mlx, window.mlx_win, k * care, c, yellow);
+							c++;
+						}
 					}
-				}
-				if (map[i - 8] == 1)
-				{
-					c = k * 62;
-					while (c < (k + 1) * 62)
+					if (map->table[i - 1][j] == '1')
 					{
-						mlx_pixel_put(window.mlx, window.mlx_win, c, j * 62, yellow);
-						c++;
+						c = k * care;
+						while (c < (k + 1) * care)
+						{
+							mlx_pixel_put(window.mlx, window.mlx_win, c, j * care, yellow);
+							c++;
+						}
 					}
-				}
 			}
-			i++;
+			j++;
 			k++;
 		}
-		j++;
+		i++;
 	}
 }
+
+
+
+
+
+
+
+//---------------------------------------------------------------------------------------------------------------------------//
+
+
+
+
+// void	drawmap(int *map, t_mlxk window, t_map *map2)
+// {
+// 	int	i;
+// 	int	c = -1;
+// 	int j = 0;
+// 	int	k;
+// 	i = 0;
+	
+// 	while (j < 8)
+// 	{
+// 		k = 0;
+// 		while (i < 8 * (j + 1))
+// 		{
+// 			if (map[i] == 1)
+// 			{
+// 				c = k * care;
+// 				while (c < (k + 1) * care)
+// 				{
+// 					mlx_pixel_put(window.mlx, window.mlx_win, c, j * care, yellow);
+// 					c++;
+// 				}
+// 				c = j * care;
+// 				while (c < (j + 1) * care)
+// 				{
+// 					mlx_pixel_put(window.mlx, window.mlx_win, k * care, c, yellow);
+// 					c++;
+// 				}
+// 			}
+// 			else
+// 			{
+// 				if (map[i - 1] == 1)
+// 				{
+// 					c = j * care;
+// 					while (c < (j + 1) * care)
+// 					{
+// 						mlx_pixel_put(window.mlx, window.mlx_win, k * care, c, yellow);
+// 						c++;
+// 					}
+// 				}
+// 				if (map[i - 8] == 1)
+// 				{
+// 					c = k * care;
+// 					while (c < (k + 1) * care)
+// 					{
+// 						mlx_pixel_put(window.mlx, window.mlx_win, c, j * care, yellow);
+// 						c++;
+// 					}
+// 				}
+// 			}
+// 			i++;
+// 			k++;
+// 		}
+// 		j++;
+// 	}
+// }

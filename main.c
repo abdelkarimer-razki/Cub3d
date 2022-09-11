@@ -1,7 +1,8 @@
-#include "cub3d.h"
+#include "cub3D.h"
 
-int	controlplayer(int key, t_mlxk *params)
+int	controlplayer(int key, t_mlxk *params, t_map *map2)
 {
+	
 	int		map[64] = 
 	{
 		1, 1, 1, 1, 1, 1, 1, 1,
@@ -47,7 +48,7 @@ int	controlplayer(int key, t_mlxk *params)
 		params->angle -= 0.1;
 		vision(*params, 0, params->angle);
 	}
-	drawmap(map, *params);
+	drawmap(*params, map2);
 	return 0;
 }
 
@@ -70,8 +71,10 @@ int	main(void)
 	window.angle = 0;
 	window.mlx = mlx_init();
 	window.mlx_win = mlx_new_window(window.mlx, 1500, 500, "cub3d");
-	drawmap(map, window);
+	drawmap(map, window ,map2);
 	vision(window, 0, window.angle);
 	mlx_hook(window.mlx_win, 2, 0, &controlplayer, &window);
 	mlx_loop(window.mlx);
 }
+
+
