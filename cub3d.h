@@ -6,7 +6,7 @@
 /*   By: bboulhan <bboulhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/06 15:22:20 by bboulhan          #+#    #+#             */
-/*   Updated: 2022/09/11 15:37:55 by bboulhan         ###   ########.fr       */
+/*   Updated: 2022/09/12 13:19:33 by bboulhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,16 @@
 # include <fcntl.h>
 # include "mlx.h"
 # include "math.h"
+
 # define white 16777215
 # define yellow 16776960
+# define degre 0.0174533
+# define angleV 0.523599
 # define care 50
+
+int karim;
+int colors[9];
+
 
 typedef struct mlx
 {
@@ -37,6 +44,7 @@ typedef struct mlx
 	int		bits_per_pixel;
 	int		line_length;
 	int		endian;
+	int		rest;
 }	t_mlxk;
 
 
@@ -85,6 +93,12 @@ void	dda(t_mlxk window, int length, double angle);
 void	drawmap(t_mlxk window, t_map * map);
 void	vision(t_mlxk window, int length, double angle);
 int		hitwall(int *map, int x1, int y1);
-
+void	my_mlx_pixel_put(t_mlxk *data, int x, int y, int color);
 
 #endif
+
+
+// void	dda(t_mlxk *window, float length, double angle, int i);
+// void	drawmap(int *map, t_mlxk *window);
+// void	vision(t_mlxk *window, int length, double angle);
+// int		hitwall(int *map, int x1, int y1);

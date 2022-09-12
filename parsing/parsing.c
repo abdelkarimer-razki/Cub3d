@@ -6,7 +6,7 @@
 /*   By: bboulhan <bboulhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/06 15:35:06 by bboulhan          #+#    #+#             */
-/*   Updated: 2022/09/11 17:49:05 by bboulhan         ###   ########.fr       */
+/*   Updated: 2022/09/12 19:16:17 by bboulhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,29 +124,117 @@ void	check_walls_top_and_bottom(char *line)
 	}
 }
 
-void	check_walls(t_map *map)
+void	check_walls(char **table)
 {
 	int	i;
 	int	j;
 	
 	i = 0;
 	j = 0;
-	check_walls_top_and_bottom(map->table[i]);
-	while (map->table[++i + 1])
+	check_walls_top_and_bottom(table[i]);
+	while (table[++i + 1])
 	{
 		j = 0;
-		while (map->table[i][j])
+		while (table[i][j])
 		{
-			while (map->table[i][j] == ' ')
+			while (table[i][j] == ' ')
 				j++;
-			if (map->table[i][j] == '1' && map->table[i][ft_strlen(map->table[i]) - 1] == '1')
+			if (table[i][j] == '1' && table[i][ft_strlen(table[i]) - 1] == '1')
 				break;
 			else
 				ft_error(2);
 		}
 	}
-	check_walls_top_and_bottom(map->table[i]);
+	check_walls_top_and_bottom(table[i]);
 }
+
+int	check_intruder(char *line)
+{
+	int	i;
+	int	k;
+	int	x;
+
+	i = -1;
+	k = 0;
+	x = 0;
+	while (line[++i])
+	{
+		if (line[i] == '1' || line[i] == '0' || line[i] == ' ' || line[i] == '\t')
+			k++;
+		else if (line[i] == 'N' || line[i] == 'S' || line[i] == 'E' || line[i] == 'W')
+			x++;
+	}
+	//printf("%d\t%d\n", k, x);
+	if (k + x != ft_strlen(line))
+		ft_error(2);
+	if (x > 0)
+		return (1);
+	return (0);
+}
+
+
+void check_contains(char **table)
+{
+	int	i;
+	int	j;
+	int	k;
+	int	x;
+
+	i = -1;
+	k = 0;
+	x = 0;
+	while (table[++i])
+	{
+		j = -1;
+		k += check_intruder(table[i]);
+		while (table[i][++j])
+		{
+			if (table[i][j] == ' ')
+			{
+				if (table[i][j + 1] && (table[i][j + 1] != ' ' && table[i][j + 1] != '1'))
+					ft_error(2);
+				else if (table[i][j - 1] && (table[i][j - 1] != ' ' && table[i][j - 1] != '1'))
+					ft_error(2);
+			}
+		}
+	}
+	if (k > 1)
+		ft_error(2);
+}
+
+
+
+
+// void	check_intruder(char **table)
+// {
+// 	int	i;
+// 	int	j;
+// 	int	k;
+// 	int	x;
+// 	int	y;
+
+// 	i = -1;
+// 	x = 0;
+// 	while (table[++i])
+// 	{
+// 		j = -1;
+// 		k = 0;
+// 		y = 0;
+// 		while (table[i][++j])
+// 		{
+// 			if (table[i][j] == '1' || table[i][j] == '0' || table[i][j] == ' ' || table[i][j] == '\t')
+// 				k++;
+// 			else if (table[i][j] == 'N' || table[i][j] == 'S' || table[i][j] == 'E' || table[i][j] == 'W')
+// 			{
+// 				x++;
+// 				y++;
+// 			}
+// 		}
+// 		if (k + y!= ft_strlen(table[i]) || x > 1)
+// 			ft_error(2);
+// 	}
+// }
+
 
 void	parsing(char *path, t_map *map)
 {
@@ -167,5 +255,6 @@ void	parsing(char *path, t_map *map)
 	if (map->C != 1 || map->EA != 1 || map->F != 1 || map->NO != 1 || map->SO != 1 || map->WE != 1)
 		ft_error(2);
 	set_the_map(path, map);
-	check_walls(map);
+	check_walls(map->table);
+	check_contains(map->table);
 }
