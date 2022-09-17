@@ -6,79 +6,12 @@
 /*   By: bboulhan <bboulhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/06 15:35:06 by bboulhan          #+#    #+#             */
-/*   Updated: 2022/09/12 19:16:17 by bboulhan         ###   ########.fr       */
+/*   Updated: 2022/09/16 15:40:50 by bboulhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3D.h"
 
-void	ft_error(int i)
-{
-	if (i == 1)
-		printf("Error\ninvalid extensions\n");
-	else if (i == 2)
-		printf("Error\ninvalid map, check your map\n");
-	else if (i == 3)
-		printf("Error\nyour file is not exist\n");
-	else if (i == 4)
-		printf("Error\ninvalid parametre\n");
-	exit(0);
-}
-
-int	check_last_elem(char *line)
-{
-	int	i;
-	int	j;
-	int	x;
-
-	i = -1;
-	j = 0;
-	x = 0;
-	while (line[++i])
-	{
-		if (line[i] == '1' || line[i] == '0' || line[i] == 'N' || line[i] == 'S' || line[i] == 'E' || line[i] == 'W')
-			j++;
-		else if (line[i] == ' ')
-			x++;	
-	}
-	if (x + j > i / 2)
-	{
-		if (x + j == i - 1)
-			return (1);
-		else
-			return (-1);
-	}
-	return (0);
-}
-
-int	count_lenght(char *path)
-{
-	int		i;
-	char	*line;
-	int		fd;
-	int		k;
-	int		x;
-
-	i = 0;
-	k = 0;
-	x = 0;
-	fd = open(path, O_RDONLY);
-	line = short_get_next_line(fd);
-	while (line)
-	{
-		if (check_last_elem(line) == 0 && k == 0)
-			x++;
-		if (check_last_elem(line) == 0)
-			i++;
-		else if (check_last_elem(line) == 1)
-			k++;
-		free(line);
-		line = short_get_next_line(fd);
-	}
-	if (x != i)
-		ft_error(3);
-	return (k * 1000 + x);
-}
 
 void	set_the_map(char *path, t_map *map)
 {
@@ -112,128 +45,34 @@ void	set_the_map(char *path, t_map *map)
 	map->table[i] = NULL;
 }
 
-void	check_walls_top_and_bottom(char *line)
-{
-	int	i;
-
-	i = -1;
-	while (line[++i])
-	{
-		if (line[i] != '1' && line[i] != ' ')
-			ft_error(2);
-	}
-}
-
-void	check_walls(char **table)
+void	check_num(char *str)
 {
 	int	i;
 	int	j;
-	
-	i = 0;
+
+	i = -1;
 	j = 0;
-	check_walls_top_and_bottom(table[i]);
-	while (table[++i + 1])
+	while (str[++i])
 	{
-		j = 0;
-		while (table[i][j])
-		{
-			while (table[i][j] == ' ')
-				j++;
-			if (table[i][j] == '1' && table[i][ft_strlen(table[i]) - 1] == '1')
-				break;
-			else
-				ft_error(2);
-		}
+		if (str[i] > '9' || str[i] < '0')
+			j++;	
 	}
-	check_walls_top_and_bottom(table[i]);
+	if (j > 2)
+		ft_error(6);
 }
 
-int	check_intruder(char *line)
+void	set_colors_info(t_map *map)
 {
-	int	i;
-	int	k;
-	int	x;
+	char	*C_color;
+	char	*F_color;
 
-	i = -1;
-	k = 0;
-	x = 0;
-	while (line[++i])
-	{
-		if (line[i] == '1' || line[i] == '0' || line[i] == ' ' || line[i] == '\t')
-			k++;
-		else if (line[i] == 'N' || line[i] == 'S' || line[i] == 'E' || line[i] == 'W')
-			x++;
-	}
-	//printf("%d\t%d\n", k, x);
-	if (k + x != ft_strlen(line))
-		ft_error(2);
-	if (x > 0)
-		return (1);
-	return (0);
+	check_num(map->C_info);
+	check_num(map->F_info);
+	C_color = check_colors_info(map->C_info);
+	F_color = check_colors_info(map->F_info);
+	map->C_num = ft_atoi(C_color);
+	map->F_num = ft_atoi(F_color);
 }
-
-
-void check_contains(char **table)
-{
-	int	i;
-	int	j;
-	int	k;
-	int	x;
-
-	i = -1;
-	k = 0;
-	x = 0;
-	while (table[++i])
-	{
-		j = -1;
-		k += check_intruder(table[i]);
-		while (table[i][++j])
-		{
-			if (table[i][j] == ' ')
-			{
-				if (table[i][j + 1] && (table[i][j + 1] != ' ' && table[i][j + 1] != '1'))
-					ft_error(2);
-				else if (table[i][j - 1] && (table[i][j - 1] != ' ' && table[i][j - 1] != '1'))
-					ft_error(2);
-			}
-		}
-	}
-	if (k > 1)
-		ft_error(2);
-}
-
-
-
-
-// void	check_intruder(char **table)
-// {
-// 	int	i;
-// 	int	j;
-// 	int	k;
-// 	int	x;
-// 	int	y;
-
-// 	i = -1;
-// 	x = 0;
-// 	while (table[++i])
-// 	{
-// 		j = -1;
-// 		k = 0;
-// 		y = 0;
-// 		while (table[i][++j])
-// 		{
-// 			if (table[i][j] == '1' || table[i][j] == '0' || table[i][j] == ' ' || table[i][j] == '\t')
-// 				k++;
-// 			else if (table[i][j] == 'N' || table[i][j] == 'S' || table[i][j] == 'E' || table[i][j] == 'W')
-// 			{
-// 				x++;
-// 				y++;
-// 			}
-// 		}
-// 		if (k + y!= ft_strlen(table[i]) || x > 1)
-// 			ft_error(2);
-// 	}
-// }
 
 
 void	parsing(char *path, t_map *map)
@@ -254,7 +93,20 @@ void	parsing(char *path, t_map *map)
 	}
 	if (map->C != 1 || map->EA != 1 || map->F != 1 || map->NO != 1 || map->SO != 1 || map->WE != 1)
 		ft_error(2);
+	check_texture(map);
+	set_colors_info(map);
 	set_the_map(path, map);
 	check_walls(map->table);
 	check_contains(map->table);
+	check_bug(map->table);
 }
+
+
+
+//-------------------------------------------------------------------------------------------//
+
+
+
+// if ((i > 0 && (table[i - 1][j] == ' ' || table[i - 1][j] == '\n')) || (table[i + 1][j] && (table[i + 1][j] == ' ' || table[i + 1][j] == '\n')) ||
+				// 	(j > 0 && (table[i][j - 1] == ' ' || table[i][j - 1] == '\n')) || (table[i][j + 1] && (table[i][j + 1] == ' ' || table[i][j + 1] == '\n')))
+				// 		ft_error(2);

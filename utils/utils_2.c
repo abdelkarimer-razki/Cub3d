@@ -6,7 +6,7 @@
 /*   By: bboulhan <bboulhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 18:13:37 by bboulhan          #+#    #+#             */
-/*   Updated: 2022/09/08 14:52:34 by bboulhan         ###   ########.fr       */
+/*   Updated: 2022/09/14 19:01:13 by bboulhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,17 +58,31 @@ char	**ft_realloc(char **table, int size)
 	return (t);
 }
 
-void	*ft_free(char **c)
+int	ft_atoi(const char *str)
 {
-	int	i;
+	char		*c;
+	size_t		k;
+	size_t		m;
 
-	i = 0;
-	if (!c)
-		return (NULL);
-	while (c[i])
-		i++;
-	while (--i >= 0)
-		free(c[i]);
-	free(c);
-	return (NULL);
+	c = (char *)str;
+	m = 1;
+	k = 0;
+	while (*c == ' ' || *c == '\n'
+		|| *c == '\t' || *c == '\r'
+		|| *c == '\f' || *c == '\v' )
+	{
+		c++;
+	}
+	if (*c == '-' || *c == '+')
+	{
+		if (*c == '-')
+			m = m * -1;
+		c++;
+	}
+	while (*c >= '0' && *c <= '9')
+	{
+		k = (*c - 48) + k * 10;
+		c++;
+	}
+	return ((int)(k * m));
 }

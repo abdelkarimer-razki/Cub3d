@@ -6,95 +6,120 @@
 /*   By: bboulhan <bboulhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/09 18:12:30 by bboulhan          #+#    #+#             */
-/*   Updated: 2022/09/12 14:18:42 by bboulhan         ###   ########.fr       */
+/*   Updated: 2022/09/15 11:35:59 by bboulhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3D.h"
 
-void	check_exten(char *path, int ac)
+void	check_walls(char **table)
 {
-	char	*exten;
-	int		fd;
+	int	i;
+	int	j;
 
-	if (ac != 2)
-		ft_error(4);
-	fd = open(path, O_RDONLY);
-	if (fd < 0)
-		ft_error(3);
-	exten = ft_strrchr(path, '.');
-	if (!exten || ft_strlen(exten) != 4)
-		ft_error(1);
-	if (ft_strncmp(exten, ".cub", 4))
-		ft_error(1);
-}
-
-int	check_elem(char *line, t_map *map)
-{
-	if (!ft_strncmp(line, "NO ", 3))
-		map->NO++;
-	else if (!ft_strncmp(line, "SO ", 3))
-		map->SO++;
-	else if (!ft_strncmp(line, "WE ", 3))
-		map->WE++;
-	else if (!ft_strncmp(line, "EA ", 3))
-		map->EA++;
-	else if (!ft_strncmp(line, "F ", 2))
-		map->F++;
-	else if (!ft_strncmp(line, "C ", 2))
-		map->C++;
-	else
-		return (0); 
-	return (1);
-}
-
-int	check_elem_2(char *line)
-{
-	if (!ft_strncmp(line, "NO ", 3))
-		return (1);
-	else if (!ft_strncmp(line, "SO ", 3))
-		return (2);
-	else if (!ft_strncmp(line, "WE ", 3))
-		return (3);
-	else if (!ft_strncmp(line, "EA ", 3))
-		return (4);
-	else if (!ft_strncmp(line, "F ", 2))
-		return (5);
-	else if (!ft_strncmp(line, "C ", 2))
-		return (6);
-	else
-		return (0);
-}
-
-void	check_info(char *line, t_map *map)
-{
-	int		i;
-	char	*s;
-
-	i = 1;
-	s = ft_calloc(1, 1);
-	if (check_elem_2(line) > 0)
+	i = 0;
+	j = 0;
+	check_walls_top_and_bottom(table[i]);
+	while (table[++i + 1])
 	{
-		while (line[++i])
+		j = 0;
+		while (table[i][j])
 		{
-			if ((line[i] == '.' && line[ i + 1] && line[i + 1] == '/') || check_elem_2(line) > 4)
+			while (table[i][j] == ' ')
+				j++;
+			if (table[i][j] == '1' && table[i][ft_strlen(table[i]) - 1] == '1')
+				break ;
+			else
+				ft_error(2);
+		}
+	}
+	check_walls_top_and_bottom(table[i]);
+}
+
+void	check_bug(char **table)
+{
+	int	i;
+	int	j;
+
+	i = -1;
+	while (table[++i])
+	{
+		j = -1;
+		while (table[i][++j])
+		{
+			if (table[i][j] == '0' || table[i][j] == 'N' ||
+				table[i][j] == 'S' || table[i][j] == 'W' || table[i][j] == 'E')
 			{
-				while (line[i] && line[i] != '\n')
-					s = add_char(s, line[i++]);
+				if ((i > 0 && (table[i - 1][j] == ' ' || table[i - 1][j] == '\n'
+					|| table[i - 1][j] == 0)) ||
+					(table[i + 1][j] && (table[i + 1][j] == ' ' ||
+					table[i + 1][j] == '\n' || table[i + 1][j] == 0)) ||
+					(j > 0 && (table[i][j - 1] == ' ' ||
+					table[i][j - 1] == '\n' || table[i][j - 1] == 0)) ||
+					(table[i][j + 1] && (table[i][j + 1] == ' ' ||
+					table[i][j + 1] == '\n' || table[i][j + 1] == 0)))
+					ft_error(2);
 			}
 		}
-		if (check_elem_2(line) == 1)
-			map->NO_info = ft_strdup(s);
-		else if (check_elem_2(line) == 2)
-			map->SO_info = ft_strdup(s);
-		else if (check_elem_2(line) == 3)
-			map->WE_info = ft_strdup(s);
-		else if (check_elem_2(line) == 4)
-			map->EA_info = ft_strdup(s);
-		else if (check_elem_2(line) == 5)
-			map->F_info = ft_strdup(s);
-		else if (check_elem_2(line) == 6)
-			map->C_info = ft_strdup(s);
 	}
-	free(s);
 }
+
+void	check_contains(char **table)
+{
+	int	i;
+	int	j;
+	int	k;
+	int	x;
+
+	i = -1;
+	k = 0;
+	while (table[++i])
+	{
+		j = -1;
+		x = 0;
+		k += check_intruder(table[i]);
+		while (table[i][++j])
+		{
+			if (table[i][j] == ' ')
+			{
+				if (table[i][j + 1] && (table[i][j + 1] != ' ' &&
+					table[i][j + 1] != '1'))
+					ft_error(2);
+				else if (j > 0 && (table[i][j - 1] != ' '
+					&& table[i][j - 1] != '1'))
+					ft_error(2);
+				x++;
+			}
+		}
+	}
+	if (k > 1)
+		ft_error(2);
+}
+
+void	check_texture_2(char *line)
+{
+	char	*exten;
+	
+	exten = ft_strrchr(&line[2], '.');
+	if (!exten || ft_strlen(exten) != 4)
+		ft_error(5);
+	if (ft_strncmp(exten, ".xpm", 4))
+		ft_error(5);	
+}
+
+void check_texture(t_map *map)
+{
+	check_texture_2(map->NO_info);
+	check_texture_2(map->SO_info);
+	check_texture_2(map->WE_info);
+	check_texture_2(map->EA_info);
+}
+
+				// if (i > 0 && (table[i - 1][j] == ' ' || table[i - 1][j] == '\n' || table[i - 1][j] == 0))
+				// 	ft_error(2);
+				// if (table[i + 1][j] && (table[i + 1][j] == ' ' || table[i + 1][j] == '\n' || table[i + 1][j] == 0))
+				// 	ft_error(2);
+				// if (j > 0 && (table[i][j - 1] == ' ' || table[i][j - 1] == '\n' || table[i][j - 1] == 0))
+				// 	ft_error(2);
+				// if (table[i][j + 1] && (table[i][j + 1] == ' ' || table[i][j + 1] == '\n' || table[i][j + 1] == 0))
+				// 	ft_error(2);

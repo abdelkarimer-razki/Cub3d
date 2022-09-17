@@ -6,7 +6,7 @@
 #    By: bboulhan <bboulhan@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/06 15:30:47 by bboulhan          #+#    #+#              #
-#    Updated: 2022/09/11 15:16:07 by bboulhan         ###   ########.fr        #
+#    Updated: 2022/09/15 16:30:20 by bboulhan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,8 +18,8 @@ CC = cc
 
 HEADER =  cub3D.h \
 
-FILES = cub3D.c ./utils/utils.c ./utils/utils_2.c ./parsing/parsing.c \
-		./parsing/check_map.c draw.c main.c\
+FILES = cub3D.c ./utils/utils.c ./utils/utils_2.c ./parsing/parsing.c ./parsing/checking_utils.c \
+		./parsing/check_map.c ./draw/draw2.c ./draw/main2.c ./parsing/parsing_utils.c ./utils/ft_itoa.c ./utils/ft_split.c \
 
 OBJS = $(FILES:.c=.o)
 
