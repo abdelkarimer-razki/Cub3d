@@ -7,27 +7,6 @@ int	ft_exit(void *arg)
 	exit(0);
 }
 
-int usemouse(int x, int y, t_mlxk *params)
-{
-	(void) y;
-	if (x > 500)
-	{
-		mlx_destroy_image(params->mlx, params->img);
-		//mlx_clear_window(params->mlx, params->mlx_win);
-		if (x < 1000 )
-		{
-			vision(params, 0, params->angle);
-			params->angle += degre;
-		}
-		else if (x <= 1500)
-		{
-			params->angle -= degre;
-			vision(params, 0, params->angle);
-		}
-	}
-	return 0;
-}
-
 int	controlplayer(int key, t_mlxk *params)
 {
 	int		map[64] = 
@@ -41,7 +20,7 @@ int	controlplayer(int key, t_mlxk *params)
 		1, 0, 1, 1, 0, 0, 0, 1,
 		1, 1, 1, 1, 1, 1, 1, 1
 	};
-	karim = 500;
+	params->kb = 500;
 	if (key == (2 | 13 | 1 | 0))
 	{
 		mlx_destroy_image(params->mlx, params->img);
@@ -51,10 +30,10 @@ int	controlplayer(int key, t_mlxk *params)
 		exit(0);
 	if (key == 2)
 	{
-		params->angle += degre;
-		if (params->angle >= pi * 2)
-			params->angle = degre;
-		vision(params, 0, params->angle);
+		params->angle += rotates;
+		if (params->angle > pi * 2)
+			params->angle = 0;
+		vision(params, params->angle);
 	}
 	else if (key == 13)
 	{
@@ -63,7 +42,7 @@ int	controlplayer(int key, t_mlxk *params)
 			params->y0 += movements * sin(params->angle);
 			params->x0 += movements * cos(params->angle);
 		}
-		vision(params, 0, params->angle);
+		vision(params, params->angle);
 	}
 	else if (key == 1)
 	{
@@ -72,15 +51,25 @@ int	controlplayer(int key, t_mlxk *params)
 			params->y0 -= movements * sin(params->angle);
 			params->x0 -= movements * cos(params->angle);
 		}
-		vision(params, 0, params->angle);
+		vision(params, params->angle);
 	}
 	else if (key == 0)
 	{
-		params->angle -= degre;
-		if (params->angle <= 0)
-			params->angle = (pi * 2) - degre;
-		vision(params, 0, params->angle);
+		params->angle -= rotates;
+		if (params->angle < 0)
+			params->angle = pi * 2;
+		vision(params, params->angle);
 	}
+	/*if (key == 49)
+	{
+		params->screenY -= 20;
+		vision(params, params->angle);
+		sleep(2);
+		mlx_destroy_image(params->mlx, params->img);
+		mlx_clear_window(params->mlx, params->mlx_win);
+		params->screenY += 20;
+		vision(params, params->angle);
+	}*/
 	return 0;
 }
 
@@ -90,8 +79,10 @@ int	main(void)
 
 	window.x0 = 200;
 	window.y0 = 200;
-	karim = 500;
+	window.kb = 500;
 	window.rest = 500;
+	window.screenX = 1500;
+	window.screenY = 500;
 	window.angle = 2*pi;
 	int l = 0;
 	int colors2[9] = {16777164, 16777113, 16777062, 16777011, 16776960, 13421568, 10066176, 6710784, 3355392};
@@ -101,8 +92,8 @@ int	main(void)
 		l++;
 	}
 	window.mlx = mlx_init();
-	window.mlx_win = mlx_new_window(window.mlx, 1500, 500, "cub3d");
-	vision(&window, 0, window.angle);
+	window.mlx_win = mlx_new_window(window.mlx, window.screenX, window.screenY, "cub3d");
+	vision(&window, window.angle);
 	mlx_hook(window.mlx_win, 2, 0, &controlplayer, &window);
 	//mlx_hook(window.mlx_win, 6, 0, &usemouse, &window);
 	mlx_hook(window.mlx_win, 17, 0, &ft_exit, &window);
