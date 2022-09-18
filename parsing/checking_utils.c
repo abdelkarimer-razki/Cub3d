@@ -6,7 +6,7 @@
 /*   By: bboulhan <bboulhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/14 16:42:47 by bboulhan          #+#    #+#             */
-/*   Updated: 2022/09/15 11:09:26 by bboulhan         ###   ########.fr       */
+/*   Updated: 2022/09/18 17:47:45 by bboulhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void	check_exten(char *path, int ac)
 		ft_error(1);
 	if (ft_strncmp(exten, ".cub", 4))
 		ft_error(1);
+	close(fd);
 }
 
 int	check_elem(char *line, t_map *map)

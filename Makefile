@@ -6,7 +6,7 @@
 #    By: bboulhan <bboulhan@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/06 15:30:47 by bboulhan          #+#    #+#              #
-#    Updated: 2022/09/15 16:30:20 by bboulhan         ###   ########.fr        #
+#    Updated: 2022/09/18 18:44:48 by bboulhan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,7 @@ OBJS = $(FILES:.c=.o)
 all : $(NAME)
 
 $(NAME) : $(OBJS) $(HEADER)
-	$(CC) $(CFLAGS) $(OBJS) -I $(HEADER) -o $(NAME) -lmlx -framework OpenGL -framework AppKit
+	$(CC) $(CFLAGS) $(OBJS) -I $(HEADER) -o $(NAME) -lmlx -framework OpenGL -framework AppKit -static-libsan -fsanitize=address
 	clear
 
 clean : 

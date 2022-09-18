@@ -6,7 +6,7 @@
 /*   By: bboulhan <bboulhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/06 15:35:06 by bboulhan          #+#    #+#             */
-/*   Updated: 2022/09/16 15:40:50 by bboulhan         ###   ########.fr       */
+/*   Updated: 2022/09/18 18:00:40 by bboulhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,13 @@ void	set_the_map(char *path, t_map *map)
 	while (line)
 	{
 		map->table[i] = ft_strdup(line);
-		map->table[i++][ft_strlen(line) - 1] = 0;
+		map->table[i++][ft_strlen(line) - 1] = '\0';
+		//printf("%s&\n", map->table[i - 1]);
 		free(line);
-		line = short_get_next_line(fd);	
+		line = short_get_next_line(fd);
 	}
 	map->table[i] = NULL;
+	close(fd);
 }
 
 void	check_num(char *str)
@@ -74,7 +76,6 @@ void	set_colors_info(t_map *map)
 	map->F_num = ft_atoi(F_color);
 }
 
-
 void	parsing(char *path, t_map *map)
 {
 	char	*line;
@@ -99,6 +100,9 @@ void	parsing(char *path, t_map *map)
 	check_walls(map->table);
 	check_contains(map->table);
 	check_bug(map->table);
+	close(fd);
+	// printf("----------------------\n");
+	// print_table(map->table);
 }
 
 

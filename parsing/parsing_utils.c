@@ -6,7 +6,7 @@
 /*   By: bboulhan <bboulhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 13:01:44 by bboulhan          #+#    #+#             */
-/*   Updated: 2022/09/15 11:09:56 by bboulhan         ###   ########.fr       */
+/*   Updated: 2022/09/18 17:47:06 by bboulhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ int	count_lenght(char *path)
 		free(line);
 		line = short_get_next_line(fd);
 	}
+	close(fd);
 	return (k * 1000 + x);
 }
 
