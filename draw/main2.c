@@ -6,7 +6,7 @@
 /*   By: bboulhan <bboulhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/15 15:38:58 by bboulhan          #+#    #+#             */
-/*   Updated: 2022/09/18 19:23:12 by bboulhan         ###   ########.fr       */
+/*   Updated: 2022/09/19 12:25:37 by bboulhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ void	dda(t_mlxk *window, double angle, int i)
 			x0 += (x1 - x0) / fabs(y1 - y0);
 		}
 	}
+	//printf("x0 : %0.0f\t y0 : %0.0f\n", x0, y0);
 }
 
 int	ft_exit(void *arg)

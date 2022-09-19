@@ -6,7 +6,7 @@
 /*   By: bboulhan <bboulhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/15 18:50:10 by bboulhan          #+#    #+#             */
-/*   Updated: 2022/09/18 19:15:05 by bboulhan         ###   ########.fr       */
+/*   Updated: 2022/09/19 12:31:41 by bboulhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ int	hitwall_horizantal(char **table, int x1, int y1)
 	j = x1 / care;
 	if (i >= ft_strlen_2(table))
 		return(1);
-	// if (j >= ft_strlen (table[i]))
-	// 	return(0);
+	if (j >= ft_strlen(table[i]))
+		return(1);
 	if (x1 < 0 || y1 < 0)
 		return (1);
 	if (table[i][j] == '1' || (i > 0 && table[i - 1][j] == '1'))
@@ -39,8 +39,6 @@ int hitwall(char **table, int x1, int y1)
 	j = x1 / care;
 	if (i >= ft_strlen_2(table))
 		return(1);
-	// if (j >= ft_strlen (table[i]))
-	// 	return(0);
 	if (x1 < 0 || y1 < 0)
 		return (1);
 	if (table[i][j] == '1')
@@ -58,7 +56,7 @@ int	hitwall_vertical(char **table, int x1, int y1)
 	if (i >= ft_strlen_2(table))
 		return(1);
 	// if (j >= ft_strlen(table[i]))
-	// 	return(0);
+	// 	return(1);
 	if (x1 < 0 || y1 < 0)
 		return (1);
 	if (table[i][j] == '1' || (j > 0 && table[i][j - 1] == '1'))

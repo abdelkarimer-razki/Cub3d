@@ -6,7 +6,7 @@
 /*   By: bboulhan <bboulhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/06 15:22:20 by bboulhan          #+#    #+#             */
-/*   Updated: 2022/09/18 18:54:20 by bboulhan         ###   ########.fr       */
+/*   Updated: 2022/09/19 11:36:42 by bboulhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 # define rotates (degre * 30)
 # define movements 15
 # define angleV (nray * degre)/2
-# define care 62
+# define care 40
 
 int colors[9];
 

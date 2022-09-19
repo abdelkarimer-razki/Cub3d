@@ -69,14 +69,34 @@ void	free_all(t_map *map)
 }
 
 
+void	player_position(char **table, t_mlxk *window)
+{
+	int	i;
+	int	j;
+
+	i = -1;
+	while (table[++i])
+	{
+		j = -1;
+		while (table[i][++j])
+		{
+			if (table[i][j] == 'N' || table[i][j] == 'S' || table[i][j] == 'W' || table[i][j] == 'E')
+			{
+				window->x0 = j * care - (care / 2);
+				window->y0 = i * care - (care / 2);
+				break ;
+			}
+		}
+	}
+}
+
+
 int	main(int ac, char **av)
 {
 	t_mlxk	window;
 	t_map *map;
 
 	
-	window.x0 = 200;
-	window.y0 = 200;
 	window.kb = 500;
 	window.rest = 500;
 	window.screenX = 1500;
@@ -101,9 +121,10 @@ int	main(int ac, char **av)
 	
 
 	//---------------draw---------------//
+	
 	window.table = map->table;
 	window.map = map;
-
+	player_position(map->table, &window);
 
 	window.mlx = mlx_init();
 	window.mlx_win = mlx_new_window(window.mlx, window.screenX, window.screenY, "cub3d");
