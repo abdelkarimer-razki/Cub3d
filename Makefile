@@ -5,40 +5,39 @@
 #                                                     +:+ +:+         +:+      #
 #    By: bboulhan <bboulhan@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2022/05/21 14:06:22 by bboulhan          #+#    #+#              #
-#    Updated: 2022/06/30 02:58:13 by bboulhan         ###   ########.fr        #
+#    Created: 2022/09/06 15:30:47 by bboulhan          #+#    #+#              #
+#    Updated: 2022/09/18 18:44:48 by bboulhan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = cub3d
+NAME = cub3D
 
-CFLAGS = -Wall -Werror -Wextra 
-
-
-INCLUDE = cub3d.h
+CFLAGS = -Wall -Werror -Wextra -Ofast -Os 
 
 CC = cc
 
-FILES = main.c draw.c
+HEADER =  cub3D.h \
 
-OBJS = ${FILES:.c=.o}
+FILES = cub3D.c ./utils/utils.c ./utils/utils_2.c ./parsing/parsing.c ./parsing/checking_utils.c \
+		./parsing/check_map.c ./draw/draw2.c ./draw/main2.c ./parsing/parsing_utils.c ./utils/ft_itoa.c ./utils/ft_split.c \
 
-all:$(NAME)
+OBJS = $(FILES:.c=.o)
 
-$(NAME): $(OBJS) $(INCLUDE)
-	@$(CC) $(CFLAGS) $(OBJS) -I $(INCLUDE) -o $(NAME) -lmlx -framework OpenGL -framework AppKit -static-libsan -fsanitize=address
-	@echo "SUUUUUUUUIIIIIII"
+%.o : %.c $(HEADER)
+	$(CC) $(CFLAGS) -c $< -o $@
 
-%.o : %.c $(INCLUDE)
-	@gcc  $(CFLAGS) -o $@ -c $<
+all : $(NAME)
 
-clean:
-	@rm -f ${OBJS}
-	@echo "SUUUUUUUUIIIIIII"
+$(NAME) : $(OBJS) $(HEADER)
+	$(CC) $(CFLAGS) $(OBJS) -I $(HEADER) -o $(NAME) -lmlx -framework OpenGL -framework AppKit -static-libsan -fsanitize=address
+	clear
 
-fclean: clean
-	@rm -f ${NAME}
-	@rm -f fdf_bonus
-	@echo "SUUUUUUUUIIIIIII"
+clean : 
+	rm -f $(OBJS)
 
-re: fclean all
+fclean : clean
+	rm -f $(NAME) 
+
+re : fclean all
+
+.PHONY : re fclean clean all
