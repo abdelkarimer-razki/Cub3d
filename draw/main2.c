@@ -9,7 +9,6 @@
 /*   Updated: 2022/09/19 12:25:37 by bboulhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 # include "../cub3d.h"
 
 void	sky_and_floor(t_mlxk *window)
@@ -21,9 +20,9 @@ void	sky_and_floor(t_mlxk *window)
 	while (++i < window->screenX)
 	{
 		j = -1;
-		while (++j < window->screenY)
+		while (++j < window->screenY + window->up)
 		{
-			if (j < window->screenY / 2)
+			if (j < (window->screenY + window->up) / 2)
 				my_mlx_pixel_put(window, i, j , rgb_to_int(0, 56, 56, 56));
 			else
 				my_mlx_pixel_put(window, i, j , rgb_to_int(0, 113, 113, 113));
@@ -35,6 +34,8 @@ void	playerpositon(t_mlxk *window)
 {
 	int	i;
 	int	y;
+	int x;
+	
 
 	i = window->x0 - 1;
 	while (++i  < window->x0 + 10)
@@ -42,6 +43,13 @@ void	playerpositon(t_mlxk *window)
 		y = window->y0 - 1;
 		while (++y < window->y0 + 10)
 			my_mlx_pixel_put1(window, i, y, rgb_to_int(0, 255, 0, 0));
+	}
+	i = -1;
+	while (++i < 360)
+	{
+		x = (window->screenX/2) + 15 * cos(i);
+		y = (window->screenY/2) + 15 * sin(i);
+		my_mlx_pixel_put(window, x, y, white);
 	}
 }
 
@@ -70,20 +78,9 @@ void    vision(t_mlxk *window, double angle, t_map *map)
 	mlx_put_image_to_window(window->mlx, window->mlx_win, window->img, 0, 0);
 }
 
-void	dda(t_mlxk *window, double angle, int i)
+void	draw_dda(t_mlxk *window, double x0, double y0, double x1, double y1)
 {
-	double	x1;
-	double	y1;
-	double	x0;
-	double	y0;
-
-	x0 = window->x0;
-	y0 = window->y0;
-	horizontal_lines(&window->xh, &window->yh, window, angle);
-	vertical_lines(&window->xv, &window->yv, window, angle);
-	shortdistance(&x1, &y1, window);
-	ray_to_3d(window, dbt(x1, y1, x0, y0), i);
-	/*if (fabs(x1 - x0) > fabs(y1 - y0))
+	if (fabs(x1 - x0) > fabs(y1 - y0))
 	{
 		while ((int)x0 != (int)x1)
 		{
@@ -100,7 +97,22 @@ void	dda(t_mlxk *window, double angle, int i)
 			y0 += (y1 - y0) / fabs(y1 - y0);
 			x0 += (x1 - x0) / fabs(y1 - y0);
 		}
-	}*/
+	}
+}
+
+void	dda(t_mlxk *window, double angle, int i)
+{
+	double	x1;
+	double	y1;
+	double	x0;
+	double	y0;
+
+	x0 = window->x0;
+	y0 = window->y0;
+	horizontal_lines(&window->xh, &window->yh, window, angle);
+	vertical_lines(&window->xv, &window->yv, window, angle);
+	shortdistance(&x1, &y1, window);
+	ray_to_3d(window, dbt(x1, y1, x0, y0), i);
 }
 
 int	ft_exit(void *arg)
@@ -132,7 +144,7 @@ int		usemouse(int x, int y, t_mlxk *params, t_map *map)
 int	controlplayer(int key, t_mlxk *params)
 {
 	params->kb = 0;
-	if (key == (2 | 13 | 1 | 0))
+	if ((key == 2) || (key == 13) || (key == 1) || (key == 0))
 	{
 		mlx_destroy_image(params->mlx, params->img);
 		mlx_clear_window(params->mlx, params->mlx_win);
@@ -142,7 +154,6 @@ int	controlplayer(int key, t_mlxk *params)
 	if (key == 2)
 	{
 		params->angle += rotates;
-		params->x0 += movements * cos(params->angle);
 		if (params->angle > pi * 2)
 			params->angle = 0;
 		vision(params, params->angle, params->map);
@@ -172,7 +183,21 @@ int	controlplayer(int key, t_mlxk *params)
 			params->angle = pi * 2;
 		vision(params, params->angle, params->map);
 	}
-	printf("%d\n", key);
+	else if (key == 126)
+	{
+		params->up += 30;
+		if (params->screenY + params->up > 1700)
+			params->up -= 30;
+		vision(params, params->angle, params->map);
+	}
+	else if (key == 125)
+	{
+		params->up -= 30;
+		if (params->screenY + params->up < 1080)
+			params->up += 30;
+		vision(params, params->angle, params->map);
+	}
+	person(params);
 	return 0;
 }
 
@@ -193,11 +218,29 @@ void	my_mlx_pixel_put(t_mlxk *data, int x, int y, int color)
 void	my_mlx_pixel_put1(t_mlxk *data, int x, int y, int color)
 {
 	char	*dst;
+	
 	x /= 5;
 	y /= 5;
-
 	if ((x > 0 && x < data->screenX) && (y > 0 && y < data->screenY))
 	{
+		x = x - ((data->x0 / 5) - 130);
+		y = y - ((data->y0 / 5) - 130);
+		dst = data->addr + (y * data->line_length
+				+ x * (data->bits_per_pixel / 8));
+		*(unsigned int *)dst = color;
+	}
+}
+
+void	my_mlx_pixel_put2(t_mlxk *data, int x, int y, int color)
+{
+	char	*dst;
+
+	x /= 5;
+	y /= 5;
+	if ((x > (data->x0 / 5) - 100 && x < (data->x0 / 5) + 100) && (y > (data->y0 / 5) - 100 && y < (data->y0 / 5) + 100))
+	{
+		x = x - ((data->x0 / 5) - 130);
+		y = y - ((data->y0 / 5) - 130);
 		dst = data->addr + (y * data->line_length
 				+ x * (data->bits_per_pixel / 8));
 		*(unsigned int *)dst = color;
@@ -220,13 +263,13 @@ void	drawmap(t_map *map, t_mlxk *window)
 			{
 				c = (j * care) - 1;
 				while (++c < (j + 1) * care)
-					my_mlx_pixel_put1(window, c , i * care, yellow);
+					my_mlx_pixel_put2(window, c , i * care, yellow);
 			}
 			if (map->table[i][j] == '1' || (j > 0 && map->table[i][j - 1] == '1'))
 			{
 				c = (i * care) - 1;
 				while (++c < (i + 1) * care)
-					my_mlx_pixel_put1(window, j * care, c, yellow);
+					my_mlx_pixel_put2(window, j * care, c, yellow);
 			}
 		}
 	}

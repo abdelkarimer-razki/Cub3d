@@ -71,6 +71,7 @@ typedef struct mlx
 	int		bits_per_pixel;
 	int		line_length;
 	int		endian;
+	int		up;
 	int		rest;
 	double	length;
 	int		kb;
@@ -91,6 +92,7 @@ char	*ft_strdup(const char *source);
 char	*add_char(char *str, char c);
 char	*ft_strjoin(char const *s1, char *s2);
 int		ft_strlen(const char *s);
+void	person(t_mlxk *window);
 void	*ft_calloc(size_t num, size_t size);
 char	**ft_realloc(char **table, int size);
 void	*ft_free(char **c);
@@ -133,6 +135,7 @@ void	shortdistance(double *x1, double *y1, t_mlxk *window);
 double	dbt(double x1, double y1, double x0, double y0);
 void	vertical_lines(double *x1, double *y1, t_mlxk *window, double angle);
 void	my_mlx_pixel_put1(t_mlxk *data, int x, int y, int color);
+void	my_mlx_pixel_put2(t_mlxk *data, int x, int y, int color);
 
 
 #endif

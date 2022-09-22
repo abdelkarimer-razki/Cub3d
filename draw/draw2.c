@@ -10,9 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 #include "../cub3d.h"
-#include "../a.ppm"
-#include "../pixil-frame-0.ppm"
-#include "../New Project (1).ppm"
+#include "../textures/stone_wall.ppm"
+#include "../textures/stone_wall1.ppm"
+#include "../textures/stone_wall2.ppm"
 
 int	hitwall_horizantal(char **table, int x1, int y1)
 {
@@ -160,22 +160,22 @@ void	ray_to_3d(t_mlxk *window, double length, int i)
 	else if (i >= (nray / 2))
 		length *= cos((i % (nray / 2)) * degre);
 	lineh = 50 * window->screenY / length;
-	y = (window->screenY - lineh) / 2;
+	y = (window->screenY + window->up - lineh) / 2;
 	window->kb += 1;
-	while ((int)y < lineh + (window->screenY - lineh) / 2)
+	while ((int)y < lineh + (window->screenY + window->up - lineh) / 2)
 	{
 		if (window->length == dbt(window->xh, window->yh, window->x0, window->y0))
 		{
-			int red = wall[((((int)d * 32) + ((int)window->xh % 32)) * 3)];
-			int green = wall[((((int)d * 32) + ((int)window->xh % 32)) * 3) + 1];
-			int blue = wall[((((int)d * 32) + ((int)window->xh % 32)) * 3) + 2];
+			int red = wall2[((((int)d * 32) + ((int)window->xh % 32)) * 3)];
+			int green = wall2[((((int)d * 32) + ((int)window->xh % 32)) * 3) + 1];
+			int blue = wall2[((((int)d * 32) + ((int)window->xh % 32)) * 3) + 2];
 			my_mlx_pixel_put(window, window->kb, y, rgb_to_int(0 ,red, green, blue));
 		}
 		else if (window->length == dbt(window->xv, window->yv, window->x0, window->y0))
 		{
-			int red = textures2[((((int)d * 32) + ((int)window->yv % 32)) * 3)];
-			int green = textures2[((((int)d * 32) + ((int)window->yv % 32)) * 3) + 1];
-			int blue = textures2[((((int)d * 32) + ((int)window->yv % 32)) * 3) + 2];
+			int red = wall[((((int)d * 32) + ((int)window->yv % 32)) * 3)];
+			int green = wall[((((int)d * 32) + ((int)window->yv % 32)) * 3) + 1];
+			int blue = wall[((((int)d * 32) + ((int)window->yv % 32)) * 3) + 2];
 			my_mlx_pixel_put(window, window->kb, y, rgb_to_int(0 ,red, green, blue));
 		}
 		d += (32.00000 / lineh);
