@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d.h"
+#include "cub3D.h"
 
 void print_table(char **table)
 {
@@ -43,7 +43,6 @@ void	print(t_map *map)
 	printf("%s\n", map->SO_info);
 	printf("%s\n", map->WE_info);
 	printf("%s\n", map->EA_info);
-	printf("%d\t%d\n", map->C_num, map->F_num);
 	printf("--------------\n");
 	while (map->table[++i])
 		printf("%s\n", map->table[i]);
@@ -80,6 +79,23 @@ void	free_all(t_map *map)
 	free(map);
 }
 
+// void	print_image(t_map *map)
+// {
+// 	int i;
+// 	int j;
+// 	int x;
+// 	i = -1;
+// 	x = 0;
+// 	while (map->texture_info[++i])
+// 	{
+// 		j = -1;
+// 		printf("x : %d   \t", x);
+// 		while (map->texture_info[i][++j])
+// 			printf("%d\t", map->texture_info[i][j]);
+// 		printf("\n");
+// 		x++;
+// 	}
+// }
 
 void	player_position(char **table, t_mlxk *window)
 {
@@ -116,16 +132,62 @@ void	initialize(t_mlxk *window, t_map *map)
 	window->mlx_win = mlx_new_window(window->mlx, window->screenX, window->screenY, "TBC (The best cub3d)");
 }
 
+
+// void	texture_parse(t_map *map)
+// {
+// 	char	**texture;
+// 	char	*line;
+// 	int		fd;
+// 	int		i;
+// 	int		j;
+// 	int		x;
+
+// 	i = -1;
+// 	fd = open ("../Cub3d/textures/stone_wall.ppm", O_RDWR);
+// 	if (fd < 0)
+// 		ft_error(7);
+// 	line = short_get_next_line(fd);
+// 	texture = ft_split(line, ',');
+// 	free(line);
+// 	line = ft_calloc(1, 1);
+// 	while (texture[0][++i])
+// 	{
+// 		if (texture[0][i] >= '0' && texture[0][i] <= '9')
+// 			line = add_char(line, texture[0][i]);
+// 	}
+// 	free(texture[0]);
+// 	texture[0] = ft_strdup(line);
+// 	map->texture_info = malloc(sizeof(int *) * (ft_strlen_2(texture) / 3));
+// 	i = 0;
+// 	j = -1;
+// 	while (texture[i])
+// 	{
+// 		x = 0;
+// 		map->texture_info[++j] = malloc(sizeof(int) * 3);
+// 		while (texture[i] && x < 3)
+// 			map->texture_info[j][x++] = ft_atoi(texture[i++]);
+// 	}
+// 	ft_free(texture);
+// 	free(line);
+//}
+
+
+
+
+
+
+
+
 int	main(int ac, char **av)
 {
 	t_mlxk	window;
-	t_map *map;
+	t_map 	*map;
 
-	
 	map = malloc(sizeof(t_map) * 1);
 	put_values(map);
     check_exten(av[1], ac);
 	parsing(av[1], map);
+	//texture_parse(map, "../Cub3d/textures/stone_wall.ppm");
 	player_position(map->table, &window);
 	initialize(&window, map);
  	vision(&window, window.angle, map);

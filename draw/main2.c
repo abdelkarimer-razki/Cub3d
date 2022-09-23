@@ -6,10 +6,16 @@
 /*   By: bboulhan <bboulhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/15 15:38:58 by bboulhan          #+#    #+#             */
-/*   Updated: 2022/09/19 12:25:37 by bboulhan         ###   ########.fr       */
+/*   Updated: 2022/09/22 21:12:07 by bboulhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-# include "../cub3d.h"
+
+#include "../cub3D.h"
+
+
+
+
+
 
 void	sky_and_floor(t_mlxk *window)
 {

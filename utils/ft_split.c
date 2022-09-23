@@ -6,11 +6,11 @@
 /*   By: bboulhan <bboulhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 13:56:52 by aer-razk          #+#    #+#             */
-/*   Updated: 2022/09/14 18:59:51 by bboulhan         ###   ########.fr       */
+/*   Updated: 2022/09/22 15:24:14 by bboulhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../cub3d.h"
+#include "../cub3D.h"
 
 void	*ft_free(char **c)
 {

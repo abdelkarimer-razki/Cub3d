@@ -6,11 +6,11 @@
 /*   By: bboulhan <bboulhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 17:25:49 by bboulhan          #+#    #+#             */
-/*   Updated: 2022/09/18 18:54:08 by bboulhan         ###   ########.fr       */
+/*   Updated: 2022/09/22 15:24:14 by bboulhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../cub3d.h"
+#include "../cub3D.h"
 
 int	ft_strlen_2(char **s)
 {

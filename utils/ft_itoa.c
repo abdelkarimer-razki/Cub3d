@@ -6,11 +6,11 @@
 /*   By: bboulhan <bboulhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 20:11:01 by bboulhan          #+#    #+#             */
-/*   Updated: 2022/09/14 18:59:38 by bboulhan         ###   ########.fr       */
+/*   Updated: 2022/09/22 15:24:14 by bboulhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../cub3d.h"
+#include "../cub3D.h"
 
 int	my_check(long k)
 {

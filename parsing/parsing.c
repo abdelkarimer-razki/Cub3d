@@ -6,12 +6,11 @@
 /*   By: bboulhan <bboulhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/06 15:35:06 by bboulhan          #+#    #+#             */
-/*   Updated: 2022/09/18 18:00:40 by bboulhan         ###   ########.fr       */
+/*   Updated: 2022/09/23 14:23:26 by bboulhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../cub3d.h"
-
+#include "../cub3D.h"
 
 void	set_the_map(char *path, t_map *map)
 {
@@ -20,7 +19,7 @@ void	set_the_map(char *path, t_map *map)
 	int		fd;
 	int		k;
 	int		lenght;
-	
+
 	i = 0;
 	k = count_lenght(path);
 	lenght = k / 1000;
@@ -33,54 +32,69 @@ void	set_the_map(char *path, t_map *map)
 		free(line);
 		line = short_get_next_line(fd);
 	}
-	i = 0;
-	map->table = malloc(sizeof (char **) * (lenght + 1));
-	while (line)
-	{
-		map->table[i] = ft_strdup(line);
-		map->table[i++][ft_strlen(line) - 1] = '\0';
-		//printf("%s&\n", map->table[i - 1]);
-		free(line);
-		line = short_get_next_line(fd);
-	}
-	map->table[i] = NULL;
+	set_map_2(map, line, fd, lenght);
 	close(fd);
 }
 
-void	check_num(char *str)
+char	**texture_parse_2(char *path)
 {
-	int	i;
-	int	j;
+	char	**texture;
+	int		i;
+	char	*line;
+	int		fd;
 
 	i = -1;
-	j = 0;
-	while (str[++i])
+	fd = open (path, O_RDWR);
+	if (fd < 0)
+		ft_error(7);
+	line = short_get_next_line(fd);
+	texture = ft_split(line, ',');
+	free(line);
+	line = ft_calloc(1, 1);
+	while (texture[0][++i])
 	{
-		if (str[i] > '9' || str[i] < '0')
-			j++;	
+		if (texture[0][i] >= '0' && texture[0][i] <= '9')
+			line = add_char(line, texture[0][i]);
 	}
-	if (j > 2)
-		ft_error(6);
+	free(texture[0]);
+	texture[0] = ft_strdup(line);
+	close(fd);
+	return (texture);
 }
 
-void	set_colors_info(t_map *map)
+void	texture_parse(char *path, int *table)
 {
-	char	*C_color;
-	char	*F_color;
+	char	**texture;
+	int		i;
+	int		j;
 
-	check_num(map->C_info);
-	check_num(map->F_info);
-	C_color = check_colors_info(map->C_info);
-	F_color = check_colors_info(map->F_info);
-	map->C_num = ft_atoi(C_color);
-	map->F_num = ft_atoi(F_color);
+	i = -1;
+	j = -1;
+	texture = texture_parse_2(path);
+	table = malloc(sizeof(int) * ft_strlen_2(texture));
+	while (texture[++i])
+		table[++j] = ft_atoi(texture[i]);
+	ft_free(texture);
+}
+
+void	map_checker(t_map *map)
+{
+	check_texture(map);
+	texture_parse(map->NO_info, map->texture_NO);
+	texture_parse(map->SO_info, map->texture_SO);
+	texture_parse(map->WE_info, map->texture_WE);
+	texture_parse(map->EA_info, map->texture_EA);
+	set_colors_info(map);
+	check_walls(map->table);
+	check_contains(map->table);
+	check_bug(map->table);
 }
 
 void	parsing(char *path, t_map *map)
 {
 	char	*line;
 	int		fd;
-	
+
 	fd = open(path, O_RDONLY);
 	if (fd < 0)
 		ft_error(3);
@@ -92,25 +106,10 @@ void	parsing(char *path, t_map *map)
 		free(line);
 		line = short_get_next_line(fd);
 	}
-	if (map->C != 1 || map->EA != 1 || map->F != 1 || map->NO != 1 || map->SO != 1 || map->WE != 1)
+	if (map->C != 1 || map->EA != 1 || map->F != 1
+		|| map->NO != 1 || map->SO != 1 || map->WE != 1)
 		ft_error(2);
-	check_texture(map);
-	set_colors_info(map);
 	set_the_map(path, map);
-	check_walls(map->table);
-	check_contains(map->table);
-	check_bug(map->table);
+	map_checker(map);
 	close(fd);
-	// printf("----------------------\n");
-	// print_table(map->table);
 }
-
-
-
-//-------------------------------------------------------------------------------------------//
-
-
-
-// if ((i > 0 && (table[i - 1][j] == ' ' || table[i - 1][j] == '\n')) || (table[i + 1][j] && (table[i + 1][j] == ' ' || table[i + 1][j] == '\n')) ||
-				// 	(j > 0 && (table[i][j - 1] == ' ' || table[i][j - 1] == '\n')) || (table[i][j + 1] && (table[i][j + 1] == ' ' || table[i][j + 1] == '\n')))
-				// 		ft_error(2);

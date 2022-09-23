@@ -6,10 +6,11 @@
 /*   By: bboulhan <bboulhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/15 18:50:10 by bboulhan          #+#    #+#             */
-/*   Updated: 2022/09/19 12:31:41 by bboulhan         ###   ########.fr       */
+/*   Updated: 2022/09/22 15:25:38 by bboulhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "../cub3d.h"
+
+#include "../cub3D.h"
 #include "../textures/stone_wall.ppm"
 #include "../textures/stone_wall1.ppm"
 #include "../textures/stone_wall2.ppm"

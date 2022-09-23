@@ -6,28 +6,11 @@
 /*   By: bboulhan <bboulhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 13:01:44 by bboulhan          #+#    #+#             */
-/*   Updated: 2022/09/18 17:47:06 by bboulhan         ###   ########.fr       */
+/*   Updated: 2022/09/22 20:52:01 by bboulhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../cub3d.h"
-
-void	ft_error(int i)
-{
-	if (i == 1)
-		printf("Error\ninvalid extensions\n");
-	else if (i == 2)
-		printf("Error\ninvalid map, check your map\n");
-	else if (i == 3)
-		printf("Error\nyour file is not exist\n");
-	else if (i == 4)
-		printf("Error\ninvalid parametre\n");
-	else if (i == 5)
-		printf("Error\ninvalid extention for the texture");
-	else if (i == 6)
-		printf("Error\ninvalid color");
-	exit(0);
-}
+#include "../cub3D.h"
 
 int	check_last_elem(char *line)
 {
@@ -40,7 +23,8 @@ int	check_last_elem(char *line)
 	x = 0;
 	while (line[++i])
 	{
-		if (line[i] == '1' || line[i] == '0' || line[i] == 'N' || line[i] == 'S' || line[i] == 'E' || line[i] == 'W')
+		if (line[i] == '1' || line[i] == '0' || line[i] == 'N'
+			|| line[i] == 'S' || line[i] == 'E' || line[i] == 'W')
 			j++;
 		else if (line[i] == ' ')
 			x++;
@@ -90,9 +74,11 @@ int	check_intruder(char *line)
 	x = 0;
 	while (line[++i])
 	{
-		if (line[i] == '1' || line[i] == '0' || line[i] == ' ' || line[i] == '\t')
+		if (line[i] == '1' || line[i] == '0'
+			|| line[i] == ' ' || line[i] == '\t')
 			k++;
-		else if (line[i] == 'N' || line[i] == 'S' || line[i] == 'E' || line[i] == 'W')
+		else if (line[i] == 'N' || line[i] == 'S'
+			|| line[i] == 'E' || line[i] == 'W')
 			x++;
 	}
 	if (k + x != ft_strlen(line))
@@ -102,31 +88,44 @@ int	check_intruder(char *line)
 	return (0);
 }
 
-char	*check_colors_info(char *info)
+void	check_colors_info(char *info, int rgb[3])
 {
 	int		i;
 	int		n;
-	char	*s;
 	char	**color;
-	
+
 	i = -1;
-	s = ft_calloc(1, 1);
 	color = ft_split(info, ',');
 	while (color[++i])
 	{
 		n = ft_atoi(color[i]);
 		if (n > 255 || n < 0)
 			ft_error(6);
+		rgb[i] = n;
 	}
 	if (i > 3)
 		ft_error(6);
-	i = -1;
-	while (color[++i])
-	{
-		n = -1;
-		while (color[i][++n])
-			s = add_char(s, color[i][n]);
-	}
 	ft_free(color);
-	return (s);
+}
+
+void	check_num(char *str)
+{
+	int	i;
+	int	j;
+	int	k;
+
+	i = -1;
+	j = 0;
+	k = 0;
+	while (str[++i])
+	{
+		if ((str[i] > '9' || str[i] < '0') && str[i] != ',')
+			j++;
+		if (str[i] == ',')
+			k++;
+	}
+	if (j > 0)
+		ft_error(6);
+	if (k > 2)
+		ft_error(6);
 }
