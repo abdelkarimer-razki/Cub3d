@@ -14,9 +14,9 @@
 
 void print_table(char **table)
 {
-	int i = 0;
-	while (table[i])
-		i++;
+	int i = -1;
+	while (table[++i])
+		printf("%s\n", table[i]);
 }
 
 void	person(t_mlxk *window)
@@ -34,7 +34,6 @@ void	person(t_mlxk *window)
 
 void	print(t_map *map)
 {
-	int i = -1;
 	printf("%s\n", map->c_info);
 	printf("%s\n", map->f_info);
 	printf("%s\n", map->no_info);
@@ -42,8 +41,7 @@ void	print(t_map *map)
 	printf("%s\n", map->we_info);
 	printf("%s\n", map->ea_info);
 	printf("--------------\n");
-	while (map->table[++i])
-		printf("%s\n", map->table[i]);
+	print_table(map->table);
 }
 
 
@@ -74,6 +72,10 @@ void	free_all(t_map *map)
 	free(map->no_info);
 	free(map->so_info);
 	free(map->we_info);
+	free(map->texture_ea);
+	free(map->texture_no);
+	free(map->texture_so);
+	free(map->texture_we);
 	free(map);
 }
 
@@ -95,7 +97,7 @@ void	player_position(char **table, t_mlxk *window)
 				if (table[i][j] == 'N')
 					window->angle = PI * 1.5;
 				else if (table[i][j] == 'S')
-					window->angle = PI/2;
+					window->angle = PI / 2;
 				else if (table[i][j] == 'E')
 					window->angle = 0;
 				else if (table[i][j] == 'W')
@@ -130,6 +132,7 @@ int	main(int ac, char **av)
 	put_values(map);
     check_exten(av[1], ac);
 	parsing(av[1], map);
+	//print_table(map->table);
 	player_position(map->table, &window);
 	initialize(&window, map);
  	vision(&window, window.angle, map);
@@ -138,5 +141,6 @@ int	main(int ac, char **av)
 	//mlx_hook(window.mlx_win, 6, 0, &usemouse, &window);
 	mlx_hook(window.mlx_win, 17, 0, &ft_exit, &window);
 	mlx_loop(window.mlx);
+	free_all(map);
 	return 0;
 }

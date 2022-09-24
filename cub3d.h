@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cub3D.h                                            :+:      :+:    :+:   */
+/*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bboulhan <bboulhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/06 15:22:20 by bboulhan          #+#    #+#             */
-/*   Updated: 2022/09/23 14:12:48 by bboulhan         ###   ########.fr       */
+/*   Updated: 2022/09/24 21:28:03 by bboulhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ typedef struct mlx
 
 void	print(t_map *map);
 void	print_table(char **table);
+//utils
 void	ft_error(int i);
 char	*ft_strrchr(const char *s, int c);
 int		ft_strncmp(const char *s1, const char *s2, int n);
@@ -95,9 +96,9 @@ void	*ft_calloc(size_t num, size_t size);
 char	**ft_realloc(char **table, int size);
 void	*ft_free(char **c);
 char	**ft_split(char const *s, char c);
-char	*ft_itoa(int n);
 int		ft_atoi(const char *str);
 int		ft_strlen_2(char **s);
+//parsing
 void	parsing(char *path, t_map *map);
 void	check_exten(char *path, int ac);
 char	*short_get_next_line(int fd);
@@ -117,6 +118,7 @@ void	check_num(char *str);
 int		*texture_parse(char *path);
 void	set_colors_info(t_map *map);
 void	set_map_2(t_map *map, char *line, int fd, int lenght);
+//draw
 void	drawmap(t_map *map, t_mlxk *window);
 void	dda(t_mlxk *window, double angle, int i);
 void	horizantal_pixel(t_mlxk *window, double d, double y, double angle);

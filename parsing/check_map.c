@@ -6,7 +6,7 @@
 /*   By: bboulhan <bboulhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/09 18:12:30 by bboulhan          #+#    #+#             */
-/*   Updated: 2022/09/23 14:12:01 by bboulhan         ###   ########.fr       */
+/*   Updated: 2022/09/24 21:54:30 by bboulhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,11 @@ void	check_bug(char **table)
 			if (table[i][j] == '0' || table[i][j] == 'N' ||
 				table[i][j] == 'S' || table[i][j] == 'W' || table[i][j] == 'E')
 			{
-				if ((i > 0 && (table[i - 1][j] == ' ' || table[i - 1][j] == '\n'
-					|| table[i - 1][j] == 0)) ||
-					(table[i + 1][j] && (table[i + 1][j] == ' ' ||
-					table[i + 1][j] == '\n' || table[i + 1][j] == 0)) ||
+				if ((i > 0 && (j > ft_strlen(table[i - 1])
+							|| table[i - 1][j] == ' '
+						|| table[i - 1][j] == '\n')) ||
+					(table[i + 1][j] && (j > ft_strlen(table[i + 1])
+					|| table[i + 1][j] == ' ' || table[i + 1][j] == '\n')) ||
 					(j > 0 && (table[i][j - 1] == ' ' ||
 					table[i][j - 1] == '\n' || table[i][j - 1] == 0)) ||
 					(table[i][j + 1] && (table[i][j + 1] == ' ' ||
@@ -104,9 +105,10 @@ void	set_colors_info(t_map *map)
 void	set_map_2(t_map *map, char *line, int fd, int lenght)
 {
 	int	i;
+	int	j;
 
 	i = 0;
-	map->table = malloc(sizeof (char **) * (lenght + 1));
+	map->table = malloc(sizeof (char *) * (lenght + 2));
 	while (line)
 	{
 		map->table[i] = ft_strdup(line);
@@ -114,5 +116,13 @@ void	set_map_2(t_map *map, char *line, int fd, int lenght)
 		free(line);
 		line = short_get_next_line(fd);
 	}
-	map->table[i] = NULL;
+	while (--i > 0)
+	{
+		j = 0;
+		while (map->table[i][j] && map->table[i][j] == ' ')
+			j++;
+		if (j < ft_strlen(map->table[i]))
+			break ;
+	}
+	map->table[i + 1] = NULL;
 }
