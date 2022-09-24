@@ -62,9 +62,10 @@ char	**texture_parse_2(char *path)
 	return (texture);
 }
 
-void	texture_parse(char *path, int *table)
+int	*texture_parse(char *path)
 {
 	char	**texture;
+	int		*table;
 	int		i;
 	int		j;
 
@@ -75,15 +76,16 @@ void	texture_parse(char *path, int *table)
 	while (texture[++i])
 		table[++j] = ft_atoi(texture[i]);
 	ft_free(texture);
+	return (table);
 }
 
 void	map_checker(t_map *map)
 {
 	check_texture(map);
-	texture_parse(map->NO_info, map->texture_NO);
-	texture_parse(map->SO_info, map->texture_SO);
-	texture_parse(map->WE_info, map->texture_WE);
-	texture_parse(map->EA_info, map->texture_EA);
+	map->texture_NO = texture_parse(map->NO_info);
+	map->texture_SO = texture_parse(map->SO_info);
+	map->texture_WE = texture_parse(map->WE_info);
+	map->texture_EA = texture_parse(map->EA_info);
 	set_colors_info(map);
 	check_walls(map->table);
 	check_contains(map->table);

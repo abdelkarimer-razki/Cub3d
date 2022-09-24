@@ -11,63 +11,6 @@
 /* ************************************************************************** */
 
 #include "../cub3D.h"
-#include "../textures/stone_wall.ppm"
-#include "../textures/stone_wall1.ppm"
-#include "../textures/stone_wall2.ppm"
-
-int	hitwall_horizantal(char **table, int x1, int y1)
-{
-	int	i;
-	int	j;
-
-	i = y1 / care;
-	j = x1 / care;
-	if (i >= ft_strlen_2(table) || i < 0)
-		return (1);
-	if (j >= ft_strlen(table[i]) || j < 0)
-		return (1);
-	if (x1 < 0 || y1 < 0)
-		return (1);
-	if (table[i][j] == '1' || (i > 0 && table[i - 1][j] == '1'))
-		return (1);
-	return (0);
-}
-
-int	hitwall(char **table, int x1, int y1)
-{
-	int	i;
-	int	j;
-
-	i = y1 / care;
-	j = x1 / care;
-	if (i >= ft_strlen_2(table) || i < 0)
-		return (1);
-	if (j >= ft_strlen(table[i]) || j < 0)
-		return (1);
-	if (x1 < 0 || y1 < 0)
-		return (1);
-	if (table[i][j] == '1')
-		return (1);
-	return (0);
-}
-
-int	hitwall_vertical(char **table, int x1, int y1)
-{
-	int	i;
-	int	j;
-
-	i = y1 / care;
-	j = x1 / care;
-	if (i >= ft_strlen_2(table) || i < 0)
-		return (1);
-	if (j >= ft_strlen(table[i]) || j < 0)
-		return (1);
-	if (x1 < 0 || y1 < 0)
-		return (1);
-	if (table[i][j] == '1' || (j > 0 && table[i][j - 1] == '1'))
-		return (1);
-	return (0);
-}
 
 void	vertical_lines(double *x1, double *y1, t_mlxk *window, double angle)
 {
@@ -94,27 +37,6 @@ void	vertical_lines(double *x1, double *y1, t_mlxk *window, double angle)
 	}
 	(*x1) = x0;
 	(*y1) = y0;
-}
-
-double	dbt(double x1, double y1, double x0, double y0)
-{
-	return (sqrt(pow(x1 - x0, 2) + pow(y1 - y0, 2)));
-}
-
-void	shortdistance(double *x1, double *y1, t_mlxk *window)
-{
-	if (dbt(window->xh, window->yh, window->x0, window->y0)
-		> dbt(window->xv, window->yv, window->x0, window->y0))
-	{
-		*x1 = window->xv;
-		*y1 = window->yv;
-	}
-	else
-	{
-		*x1 = window->xh;
-		*y1 = window->yh;
-	}
-	window->length = dbt(*x1, *y1, window->x0, window->y0);
 }
 
 void	horizontal_lines(double *x1, double *y1, t_mlxk *window, double angle)
@@ -144,16 +66,11 @@ void	horizontal_lines(double *x1, double *y1, t_mlxk *window, double angle)
 	(*y1) = y0;
 }
 
-int	rgb_to_int(int opacity, int red, int green, int blue)
-{
-	return ((opacity * 16777216) + (red * 65536) + (green * 256) + blue);
-}
-
 void	ray_to_3d(t_mlxk *window, double length, int i)
 {
 	int		lineh;
 	double	y;
-	float	d;
+	double	d;
 
 	d = 0;
 	if (i <= (nray / 2) - 1)
@@ -165,20 +82,12 @@ void	ray_to_3d(t_mlxk *window, double length, int i)
 	window->kb += 1;
 	while ((int)y < lineh + (window->screenY + window->up - lineh) / 2)
 	{
-		if (window->length == dbt(window->xh, window->yh, window->x0, window->y0))
-		{
-			int red = wall2[((((int)d * 32) + ((int)window->xh % 32)) * 3)];
-			int green = wall2[((((int)d * 32) + ((int)window->xh % 32)) * 3) + 1];
-			int blue = wall2[((((int)d * 32) + ((int)window->xh % 32)) * 3) + 2];
-			my_mlx_pixel_put(window, window->kb, y, rgb_to_int(0 ,red, green, blue));
-		}
-		else if (window->length == dbt(window->xv, window->yv, window->x0, window->y0))
-		{
-			int red = wall[((((int)d * 32) + ((int)window->yv % 32)) * 3)];
-			int green = wall[((((int)d * 32) + ((int)window->yv % 32)) * 3) + 1];
-			int blue = wall[((((int)d * 32) + ((int)window->yv % 32)) * 3) + 2];
-			my_mlx_pixel_put(window, window->kb, y, rgb_to_int(0 ,red, green, blue));
-		}
+		if (window->length == dbt(window->xh,
+				window->yh, window->x0, window->y0))
+			horizantal_pixel(window, d, y);
+		else if (window->length == dbt(window->xv,
+				window->yv, window->x0, window->y0))
+			vertical_pixel(window, d, y);
 		d += (32.00000 / lineh);
 		y++;
 	}

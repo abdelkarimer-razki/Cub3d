@@ -12,11 +12,6 @@
 
 #include "../cub3D.h"
 
-
-
-
-
-
 void	sky_and_floor(t_mlxk *window)
 {
 	int	i;
@@ -69,7 +64,6 @@ void    vision(t_mlxk *window, double angle, t_map *map)
 	window->img = mlx_new_image(window->mlx, window->screenX, window->screenY);
 	window->addr = mlx_get_data_addr(window->img, &window->bits_per_pixel, &window->line_length,
 								&window->endian);
-	(void) map;
 	sky_and_floor(window);
 	i = -1;
 	while (++i < nray)
@@ -82,28 +76,6 @@ void    vision(t_mlxk *window, double angle, t_map *map)
 	drawmap(map, window);
 	playerpositon(window);
 	mlx_put_image_to_window(window->mlx, window->mlx_win, window->img, 0, 0);
-}
-
-void	draw_dda(t_mlxk *window, double x0, double y0, double x1, double y1)
-{
-	if (fabs(x1 - x0) > fabs(y1 - y0))
-	{
-		while ((int)x0 != (int)x1)
-		{
-			my_mlx_pixel_put1(window, x0, y0, white);
-			y0 += (y1 - y0) / fabs(x1 - x0);
-			x0 += (x1 - x0) / fabs(x1 - x0);
-		}
-	}
-	else
-	{
-		while ((int)y0 != (int)y1)
-		{
-			my_mlx_pixel_put1(window, x0, y0, white);
-			y0 += (y1 - y0) / fabs(y1 - y0);
-			x0 += (x1 - x0) / fabs(y1 - y0);
-		}
-	}
 }
 
 void	dda(t_mlxk *window, double angle, int i)
@@ -127,22 +99,19 @@ int	ft_exit(void *arg)
 	exit(0);
 }
 
-int		usemouse(int x, int y, t_mlxk *params, t_map *map)
+int		usemouse(int x, int y, t_mlxk *params)
 {
-	(void) y;
-	(void) map;
-	(void) params;
-	if (x > 500 && x < 1500 && y < 500 && y > 0)
+		printf("angle:%d\n", params->mx);
+	if (x > 0 && x < params->screenX && y < params->screenY && y > 0)
 	{
-		printf("x:%d\n", x);
-		mlx_destroy_image(params->mlx, params->img);
-		params->img = NULL;
-		mlx_clear_window(params->mlx, params->mlx_win);
-		if (x < 1000)
-			params->angle -= degre;
+		if (x <= params->mx)
+			camera_left(params);
 		else
-			params->angle += degre;
-		vision(params, params->angle, map);
+			camera_right(params);
+		params->mx = x;
+
+		//person(params);
+		//printf("new mx:%d | new angle:%f \n",params->mx, params->angle);
 	}
 	return 0;
 }
@@ -150,61 +119,22 @@ int		usemouse(int x, int y, t_mlxk *params, t_map *map)
 int	controlplayer(int key, t_mlxk *params)
 {
 	params->kb = 0;
-	if ((key == 2) || (key == 13) || (key == 1) || (key == 0))
-	{
-		mlx_destroy_image(params->mlx, params->img);
-		mlx_clear_window(params->mlx, params->mlx_win);
-	}
 	if (key == 53)
 		exit(0);
 	if (key == 2)
-	{
-		params->angle += rotates;
-		if (params->angle > pi * 2)
-			params->angle = 0;
-		vision(params, params->angle, params->map);
-	}
+		camera_left(params);
 	else if (key == 13)
-	{
-		if (hitwall(params->table, params->x0 + 30 * cos(params->angle), params->y0 + 30 * sin(params->angle)) == 0)
-		{
-			params->y0 += movements * sin(params->angle);
-			params->x0 += movements * cos(params->angle);
-		}
-		vision(params, params->angle, params->map);
-	}
+		move_forward(params);
 	else if (key == 1)
-	{
-		if (hitwall(params->table, params->x0 - 30 * cos(params->angle), params->y0 - 30 * sin(params->angle)) == 0)
-		{
-			params->y0 -= movements * sin(params->angle);
-			params->x0 -= movements * cos(params->angle);
-		}
-		vision(params, params->angle, params->map);
-	}
+		move_backward(params);
 	else if (key == 0)
-	{
-		params->angle -= rotates;
-		if (params->angle < 0)
-			params->angle = pi * 2;
-		vision(params, params->angle, params->map);
-	}
+		camera_right(params);
 	else if (key == 126)
-	{
-		params->up += 30;
-		if (params->screenY + params->up > 1700)
-			params->up -= 30;
-		vision(params, params->angle, params->map);
-	}
+		camera_up(params);
 	else if (key == 125)
-	{
-		params->up -= 30;
-		if (params->screenY + params->up < 1080)
-			params->up += 30;
-		vision(params, params->angle, params->map);
-	}
+		camera_down(params);
 	person(params);
-	return 0;
+	return (0);
 }
 
 
@@ -278,5 +208,17 @@ void	drawmap(t_map *map, t_mlxk *window)
 					my_mlx_pixel_put2(window, j * care, c, yellow);
 			}
 		}
+			if (map->table[i][j] == '1' || (i > 0 && map->table[i - 1][j] == '1'))
+			{
+				c = (j * care) - 1;
+				while (++c < (j + 1) * care)
+					my_mlx_pixel_put2(window, c , i * care, yellow);
+			}
+			if (map->table[i][j] == '1' || (j > 0 && map->table[i][j - 1] == '1'))
+			{
+				c = (i * care) - 1;
+				while (++c < (i + 1) * care)
+					my_mlx_pixel_put2(window, j * care, c, yellow);
+			}
 	}
 }
