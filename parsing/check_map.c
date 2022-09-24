@@ -6,7 +6,7 @@
 /*   By: bboulhan <bboulhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/09 18:12:30 by bboulhan          #+#    #+#             */
-/*   Updated: 2022/09/18 17:58:21 by bboulhan         ###   ########.fr       */
+/*   Updated: 2022/09/23 14:12:01 by bboulhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,14 +69,12 @@ void	check_contains(char **table)
 	int	i;
 	int	j;
 	int	k;
-	int	x;
 
 	i = -1;
 	k = 0;
 	while (table[++i])
 	{
 		j = -1;
-		x = 0;
 		k += check_intruder(table[i]);
 		while (table[i][++j])
 		{
@@ -88,7 +86,6 @@ void	check_contains(char **table)
 				else if (j > 0 && (table[i][j - 1] != ' '
 					&& table[i][j - 1] != '1'))
 					ft_error(2);
-				x++;
 			}
 		}
 	}
@@ -96,30 +93,26 @@ void	check_contains(char **table)
 		ft_error(2);
 }
 
-void	check_texture_2(char *line)
+void	set_colors_info(t_map *map)
 {
-	char	*exten;
-	
-	exten = ft_strrchr(&line[2], '.');
-	if (!exten || ft_strlen(exten) != 4)
-		ft_error(5);
-	if (ft_strncmp(exten, ".xpm", 4))
-		ft_error(5);	
+	check_num(map->C_info);
+	check_num(map->F_info);
+	check_colors_info(map->C_info, map->C_num);
+	check_colors_info(map->F_info, map->F_num);
 }
 
-void check_texture(t_map *map)
+void	set_map_2(t_map *map, char *line, int fd, int lenght)
 {
-	check_texture_2(map->NO_info);
-	check_texture_2(map->SO_info);
-	check_texture_2(map->WE_info);
-	check_texture_2(map->EA_info);
-}
+	int	i;
 
-				// if (i > 0 && (table[i - 1][j] == ' ' || table[i - 1][j] == '\n' || table[i - 1][j] == 0))
-				// 	ft_error(2);
-				// if (table[i + 1][j] && (table[i + 1][j] == ' ' || table[i + 1][j] == '\n' || table[i + 1][j] == 0))
-				// 	ft_error(2);
-				// if (j > 0 && (table[i][j - 1] == ' ' || table[i][j - 1] == '\n' || table[i][j - 1] == 0))
-				// 	ft_error(2);
-				// if (table[i][j + 1] && (table[i][j + 1] == ' ' || table[i][j + 1] == '\n' || table[i][j + 1] == 0))
-				// 	ft_error(2);
+	i = 0;
+	map->table = malloc(sizeof (char **) * (lenght + 1));
+	while (line)
+	{
+		map->table[i] = ft_strdup(line);
+		map->table[i++][ft_strlen(line) - 1] = '\0';
+		free(line);
+		line = short_get_next_line(fd);
+	}
+	map->table[i] = NULL;
+}

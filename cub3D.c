@@ -12,14 +12,24 @@
 
 #include "cub3D.h"
 
-
 void print_table(char **table)
 {
 	int i = 0;
 	while (table[i])
 		i++;
-	//printf("size of i %i\n");
-		// printf("%s&\n", table[i]);	
+}
+
+void	person(t_mlxk *window)
+{
+	int	z;
+	int	k;
+	void *p;
+	void *m;
+
+	p = mlx_xpm_file_to_image(window->mlx, "./daj.xpm", &z, &k);
+	mlx_put_image_to_window(window->mlx, window->mlx_win, p, (window->screenX - z * 2) / 2, window->screenY - k);
+	m = mlx_xpm_file_to_image(window->mlx, "./ddaa.xpm", &z, &k);
+	mlx_put_image_to_window(window->mlx, window->mlx_win, m, (window->screenX - z / 2) / 2, window->screenY - k);
 }
 
 void	print(t_map *map)
@@ -31,7 +41,6 @@ void	print(t_map *map)
 	printf("%s\n", map->SO_info);
 	printf("%s\n", map->WE_info);
 	printf("%s\n", map->EA_info);
-	printf("%d\t%d\n", map->C_num, map->F_num);
 	printf("--------------\n");
 	while (map->table[++i])
 		printf("%s\n", map->table[i]);
@@ -65,9 +74,12 @@ void	free_all(t_map *map)
 	free(map->NO_info);
 	free(map->SO_info);
 	free(map->WE_info);
+	free(map->texture_EA);
+	free(map->texture_WE);
+	free(map->texture_SO);
+	free(map->texture_NO);
 	free(map);
 }
-
 
 void	player_position(char **table, t_mlxk *window)
 {
@@ -90,56 +102,37 @@ void	player_position(char **table, t_mlxk *window)
 	}
 }
 
+void	initialize(t_mlxk *window, t_map *map)
+{
+	window->kb = 0;
+	window->rest = 500;
+	window->screenX = 1920;
+	window->screenY = 1080;
+	window->up = 0;
+	window->angle = 0;
+	window->table = map->table;
+	window->map = map;
+	window->mx = window->screenX / 2;
+	window->mlx = mlx_init();
+	window->mlx_win = mlx_new_window(window->mlx, window->screenX, window->screenY, "TBC (The best cub3d)");
+}
 
 int	main(int ac, char **av)
 {
 	t_mlxk	window;
-	t_map *map;
+	t_map 	*map;
 
-	
-	window.kb = 500;
-	window.rest = 500;
-	window.screenX = 1500;
-	window.screenY = 500;
-	window.angle = 0;
-	int l = 0;
-	int colors2[9] = {16777164, 16777113, 16777062, 16777011, 16776960, 13421568, 10066176, 6710784, 3355392};
-	while (l < 9)
-	{
-		colors[l] = colors2[l];
-		l++;
-	}
-
-	//-----------parsing----------//
 	map = malloc(sizeof(t_map) * 1);
 	put_values(map);
     check_exten(av[1], ac);
 	parsing(av[1], map);
-	//print_table(map->table);
-	//----------------------------//
-
-	
-
-	//---------------draw---------------//
-	
-	window.table = map->table;
-	window.map = map;
 	player_position(map->table, &window);
-
-	window.mlx = mlx_init();
-	window.mlx_win = mlx_new_window(window.mlx, window.screenX, window.screenY, "cub3d");
+	initialize(&window, map);
  	vision(&window, window.angle, map);
-	//drawmap(map, &window);
+	person(&window);
 	mlx_hook(window.mlx_win, 2, 0, &controlplayer, &window);
 	//mlx_hook(window.mlx_win, 6, 0, &usemouse, &window);
 	mlx_hook(window.mlx_win, 17, 0, &ft_exit, &window);
 	mlx_loop(window.mlx);
 	return 0;
 }
-
-
-
-//  vision(&window, 0, window.angle, map);
-// 	mlx_hook(window.mlx_win, 2, 0, &controlplayer, &window);
-// 	//mlx_hook(window.mlx_win, 6, 0, &usemouse, &window);
-// 	mlx_hook(window.mlx_win, 17, 0, &ft_exit, &window);

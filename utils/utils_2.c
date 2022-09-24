@@ -6,7 +6,7 @@
 /*   By: bboulhan <bboulhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 18:13:37 by bboulhan          #+#    #+#             */
-/*   Updated: 2022/09/14 19:01:13 by bboulhan         ###   ########.fr       */
+/*   Updated: 2022/09/22 15:24:14 by bboulhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int	ft_strlen(const char *s)
 {
 	int	i;
 
+	//printf("%s\n", s);
 	if (s == NULL)
 		return (0);
 	i = 0;
