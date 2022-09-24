@@ -54,14 +54,14 @@ void	check_texture_file(char *path)
 
 void	check_texture(t_map *map)
 {
-	check_texture_2(map->NO_info);
-	check_texture_2(map->SO_info);
-	check_texture_2(map->WE_info);
-	check_texture_2(map->EA_info);
-	check_texture_file(map->NO_info);
-	check_texture_file(map->SO_info);
-	check_texture_file(map->WE_info);
-	check_texture_file(map->EA_info);
+	check_texture_2(map->no_info);
+	check_texture_2(map->so_info);
+	check_texture_2(map->we_info);
+	check_texture_2(map->ea_info);
+	check_texture_file(map->no_info);
+	check_texture_file(map->so_info);
+	check_texture_file(map->we_info);
+	check_texture_file(map->ea_info);
 }
 
 void	check_exten(char *path, int ac)

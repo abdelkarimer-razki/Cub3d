@@ -95,10 +95,10 @@ void	check_contains(char **table)
 
 void	set_colors_info(t_map *map)
 {
-	check_num(map->C_info);
-	check_num(map->F_info);
-	check_colors_info(map->C_info, map->C_num);
-	check_colors_info(map->F_info, map->F_num);
+	check_num(map->c_info);
+	check_num(map->f_info);
+	check_colors_info(map->c_info, map->c_num);
+	check_colors_info(map->f_info, map->f_num);
 }
 
 void	set_map_2(t_map *map, char *line, int fd, int lenght)

@@ -18,21 +18,21 @@ void	vertical_lines(double *x1, double *y1, t_mlxk *window, double angle)
 	double	y0;
 	double	sy;
 
-	x0 = (int)(window->x0 / care) * care;
-	if (angle < pi / 2 || angle > 1.5 * pi)
-		x0 += care;
+	x0 = (int)(window->x0 / CARE) * CARE;
+	if (angle < PI / 2 || angle > 1.5 * PI)
+		x0 += CARE;
 	y0 = window->y0 + tan(angle) * (x0 - window->x0);
-	sy = tan(angle) * care;
-	if (angle < pi && angle > 0 && sy < 0)
+	sy = tan(angle) * CARE;
+	if (angle < PI && angle > 0 && sy < 0)
 		sy *= -1;
-	else if (!(angle < pi && angle > 0) && sy > 0)
+	else if (!(angle < PI && angle > 0) && sy > 0)
 		sy *= -1;
 	while (hitwall_vertical(window->table, x0, y0) == 0)
 	{
-		if (angle < pi / 2 || angle > 1.5 * pi)
-			x0 += care;
+		if (angle < PI / 2 || angle > 1.5 * PI)
+			x0 += CARE;
 		else
-			x0 -= care;
+			x0 -= CARE;
 		y0 += sy;
 	}
 	(*x1) = x0;
@@ -45,49 +45,49 @@ void	horizontal_lines(double *x1, double *y1, t_mlxk *window, double angle)
 	double	y0;
 	double	sx;
 
-	y0 = (int)(window->y0 / care) * care;
-	if (angle < pi && angle > 0)
-		y0 += care;
+	y0 = (int)(window->y0 / CARE) * CARE;
+	if (angle < PI && angle > 0)
+		y0 += CARE;
 	x0 = window->x0 + ((y0 - window->y0) / tan(angle));
-	sx = care / tan(angle);
-	if (!(angle < pi / 2 || angle > 1.5 * pi) && sx > 0)
+	sx = CARE / tan(angle);
+	if (!(angle < PI / 2 || angle > 1.5 * PI) && sx > 0)
 		sx *= -1;
-	else if ((angle < pi / 2 || angle > 1.5 * pi) && sx < 0)
+	else if ((angle < PI / 2 || angle > 1.5 * PI) && sx < 0)
 		sx *= -1;
 	while (hitwall_horizantal(window->table, x0, y0) == 0)
 	{
-		if (angle < pi && angle > 0)
-			y0 += care;
+		if (angle < PI && angle > 0)
+			y0 += CARE;
 		else
-			y0 -= care;
+			y0 -= CARE;
 		x0 += sx;
 	}
 	(*x1) = x0;
 	(*y1) = y0;
 }
 
-void	ray_to_3d(t_mlxk *window, double length, int i)
+void	ray_to_3d(t_mlxk *window, double length, int i, double angle)
 {
 	int		lineh;
 	double	y;
 	double	d;
 
 	d = 0;
-	if (i <= (nray / 2) - 1)
-		length *= cos(angleV - (((i % (nray / 2)) * degre)));
-	else if (i >= (nray / 2))
-		length *= cos((i % (nray / 2)) * degre);
-	lineh = 50 * window->screenY / length;
-	y = (window->screenY + window->up - lineh) / 2;
+	if (i <= (NRAY / 2) - 1)
+		length *= cos(ANGLEV - (((i % (NRAY / 2)) * DEGRE)));
+	else if (i >= (NRAY / 2))
+		length *= cos((i % (NRAY / 2)) * DEGRE);
+	lineh = 50 * window->screeny / length;
+	y = (window->screeny + window->up - lineh) / 2;
 	window->kb += 1;
-	while ((int)y < lineh + (window->screenY + window->up - lineh) / 2)
+	while ((int)y < lineh + (window->screeny + window->up - lineh) / 2)
 	{
 		if (window->length == dbt(window->xh,
 				window->yh, window->x0, window->y0))
-			horizantal_pixel(window, d, y);
+			horizantal_pixel(window, d, y, angle);
 		else if (window->length == dbt(window->xv,
 				window->yv, window->x0, window->y0))
-			vertical_pixel(window, d, y);
+			vertical_pixel(window, d, y, angle);
 		d += (32.00000 / lineh);
 		y++;
 	}

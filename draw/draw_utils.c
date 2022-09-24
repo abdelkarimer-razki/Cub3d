@@ -25,3 +25,9 @@ void	shortdistance(double *x1, double *y1, t_mlxk *window)
 	}
 	window->length = dbt(*x1, *y1, window->x0, window->y0);
 }
+
+int	ft_exit(void *arg)
+{
+	(void)arg;
+	exit(0);
+}

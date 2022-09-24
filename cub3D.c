@@ -27,20 +27,20 @@ void	person(t_mlxk *window)
 	void *m;
 
 	p = mlx_xpm_file_to_image(window->mlx, "./daj.xpm", &z, &k);
-	mlx_put_image_to_window(window->mlx, window->mlx_win, p, (window->screenX - z * 2) / 2, window->screenY - k);
+	mlx_put_image_to_window(window->mlx, window->mlx_win, p, (window->screenx - z * 2) / 2, window->screeny - k);
 	m = mlx_xpm_file_to_image(window->mlx, "./ddaa.xpm", &z, &k);
-	mlx_put_image_to_window(window->mlx, window->mlx_win, m, (window->screenX - z / 2) / 2, window->screenY - k);
+	mlx_put_image_to_window(window->mlx, window->mlx_win, m, (window->screenx - z / 2) / 2, window->screeny - k);
 }
 
 void	print(t_map *map)
 {
 	int i = -1;
-	printf("%s\n", map->C_info);
-	printf("%s\n", map->F_info);
-	printf("%s\n", map->NO_info);
-	printf("%s\n", map->SO_info);
-	printf("%s\n", map->WE_info);
-	printf("%s\n", map->EA_info);
+	printf("%s\n", map->c_info);
+	printf("%s\n", map->f_info);
+	printf("%s\n", map->no_info);
+	printf("%s\n", map->so_info);
+	printf("%s\n", map->we_info);
+	printf("%s\n", map->ea_info);
 	printf("--------------\n");
 	while (map->table[++i])
 		printf("%s\n", map->table[i]);
@@ -50,30 +50,30 @@ void	print(t_map *map)
 void	put_values(t_map *map)
 {
 	map->table = NULL;
-    map->C = 0;
-    map->EA = 0;
-	map->F = 0;
-	map->NO = 0;
-	map->SO = 0;
-	map->WE = 0;
-	map->C_info = NULL;
-	map->EA_info = NULL;
-	map->F_info = NULL;
-	map->NO_info = NULL;
-	map->SO_info = NULL;
-	map->WE_info = NULL;
+    map->cc = 0;
+    map->ea = 0;
+	map->fc = 0;
+	map->no = 0;
+	map->so = 0;
+	map->we = 0;
+	map->c_info = NULL;
+	map->ea_info = NULL;
+	map->f_info = NULL;
+	map->no_info = NULL;
+	map->so_info = NULL;
+	map->we_info = NULL;
 }
 
 
 void	free_all(t_map *map) 
 {
 	ft_free(map->table);
-	free(map->C_info);
-	free(map->EA_info);
-	free(map->F_info);
-	free(map->NO_info);
-	free(map->SO_info);
-	free(map->WE_info);
+	free(map->c_info);
+	free(map->ea_info);
+	free(map->f_info);
+	free(map->no_info);
+	free(map->so_info);
+	free(map->we_info);
 	free(map);
 }
 
@@ -90,8 +90,16 @@ void	player_position(char **table, t_mlxk *window)
 		{
 			if (table[i][j] == 'N' || table[i][j] == 'S' || table[i][j] == 'W' || table[i][j] == 'E')
 			{
-				window->x0 = j * care - (care / 2);
-				window->y0 = i * care - (care / 2);
+				window->x0 = j * CARE - (CARE / 2);
+				window->y0 = i * CARE - (CARE / 2);
+				if (table[i][j] == 'N')
+					window->angle = PI * 1.5;
+				else if (table[i][j] == 'S')
+					window->angle = PI/2;
+				else if (table[i][j] == 'E')
+					window->angle = 0;
+				else if (table[i][j] == 'W')
+					window->angle = PI;
 				break ;
 			}
 		}
@@ -102,21 +110,21 @@ void	initialize(t_mlxk *window, t_map *map)
 {
 	window->kb = 0;
 	window->rest = 500;
-	window->screenX = 1920;
-	window->screenY = 1080;
+	window->screenx = 1920;
+	window->screeny = 1080;
 	window->up = 0;
-	window->angle = 0;
 	window->table = map->table;
 	window->map = map;
-	window->mx = window->screenX / 2;
+	window->mx = window->screenx / 2;
 	window->mlx = mlx_init();
-	window->mlx_win = mlx_new_window(window->mlx, window->screenX, window->screenY, "TBC (The best cub3d)");
+	window->mlx_win = mlx_new_window(window->mlx, window->screenx, window->screeny, "TBC (The best cub3d)");
 }
 
 int	main(int ac, char **av)
 {
 	t_mlxk	window;
 	t_map 	*map;
+
 
 	map = malloc(sizeof(t_map) * 1);
 	put_values(map);
@@ -125,9 +133,9 @@ int	main(int ac, char **av)
 	player_position(map->table, &window);
 	initialize(&window, map);
  	vision(&window, window.angle, map);
-	person(&window);
+	//person(&window);
 	mlx_hook(window.mlx_win, 2, 0, &controlplayer, &window);
-	mlx_hook(window.mlx_win, 6, 0, &usemouse, &window);
+	//mlx_hook(window.mlx_win, 6, 0, &usemouse, &window);
 	mlx_hook(window.mlx_win, 17, 0, &ft_exit, &window);
 	mlx_loop(window.mlx);
 	return 0;

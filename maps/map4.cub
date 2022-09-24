@@ -1,11 +1,11 @@
 NO ../textures/stone_wall.ppm
 SO ../textures/stone_wall1.ppm
 WE ../textures/stone_wall2.ppm
-EA ../textures/stone_wall.ppm
+EA ../textures/Castle_Wall.ppm
 
 
-F 220,100,0
-C 225,30,0
+F 56,56,56
+C 113,113,113
 
 11111111
 10000001

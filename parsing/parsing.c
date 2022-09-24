@@ -58,6 +58,7 @@ char	**texture_parse_2(char *path)
 	}
 	free(texture[0]);
 	texture[0] = ft_strdup(line);
+	free(line);
 	close(fd);
 	return (texture);
 }
@@ -82,14 +83,14 @@ int	*texture_parse(char *path)
 void	map_checker(t_map *map)
 {
 	check_texture(map);
-	map->texture_NO = texture_parse(map->NO_info);
-	map->texture_SO = texture_parse(map->SO_info);
-	map->texture_WE = texture_parse(map->WE_info);
-	map->texture_EA = texture_parse(map->EA_info);
 	set_colors_info(map);
 	check_walls(map->table);
 	check_contains(map->table);
 	check_bug(map->table);
+	map->texture_no = texture_parse(map->no_info);
+	map->texture_so = texture_parse(map->so_info);
+	map->texture_we = texture_parse(map->we_info);
+	map->texture_ea = texture_parse(map->ea_info);
 }
 
 void	parsing(char *path, t_map *map)
@@ -108,8 +109,8 @@ void	parsing(char *path, t_map *map)
 		free(line);
 		line = short_get_next_line(fd);
 	}
-	if (map->C != 1 || map->EA != 1 || map->F != 1
-		|| map->NO != 1 || map->SO != 1 || map->WE != 1)
+	if (map->cc != 1 || map->ea != 1 || map->fc != 1
+		|| map->no != 1 || map->so != 1 || map->we != 1)
 		ft_error(2);
 	set_the_map(path, map);
 	map_checker(map);

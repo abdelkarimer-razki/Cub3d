@@ -15,17 +15,17 @@
 int	check_elem(char *line, t_map *map)
 {
 	if (!ft_strncmp(line, "NO ", 3))
-		map->NO++;
+		map->no++;
 	else if (!ft_strncmp(line, "SO ", 3))
-		map->SO++;
+		map->so++;
 	else if (!ft_strncmp(line, "WE ", 3))
-		map->WE++;
+		map->we++;
 	else if (!ft_strncmp(line, "EA ", 3))
-		map->EA++;
+		map->ea++;
 	else if (!ft_strncmp(line, "F ", 2))
-		map->F++;
+		map->fc++;
 	else if (!ft_strncmp(line, "C ", 2))
-		map->C++;
+		map->cc++;
 	else
 		return (0);
 	return (1);
@@ -52,17 +52,17 @@ int	check_elem_2(char *line)
 void	set_info(char *line, t_map *map, char *s)
 {
 	if (check_elem_2(line) == 1)
-		map->NO_info = ft_strdup(s);
+		map->no_info = ft_strdup(s);
 	else if (check_elem_2(line) == 2)
-		map->SO_info = ft_strdup(s);
+		map->so_info = ft_strdup(s);
 	else if (check_elem_2(line) == 3)
-		map->WE_info = ft_strdup(s);
+		map->we_info = ft_strdup(s);
 	else if (check_elem_2(line) == 4)
-		map->EA_info = ft_strdup(s);
+		map->ea_info = ft_strdup(s);
 	else if (check_elem_2(line) == 5)
-		map->F_info = ft_strdup(s);
+		map->f_info = ft_strdup(s);
 	else if (check_elem_2(line) == 6)
-		map->C_info = ft_strdup(s);
+		map->c_info = ft_strdup(s);
 	free(s);
 }
 
@@ -86,6 +86,8 @@ void	check_info(char *line, t_map *map)
 		}
 		set_info(line, map, s);
 	}
+	else
+		free(s);
 }
 
 void	check_walls_top_and_bottom(char *line)
