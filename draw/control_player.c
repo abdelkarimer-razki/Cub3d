@@ -16,7 +16,7 @@ void	camera_left(t_mlxk *params)
 {
 	mlx_destroy_image(params->mlx, params->img);
 	mlx_clear_window(params->mlx, params->mlx_win);
-	params->angle += ROTATES;
+	params->angle += params->rotates;
 	if (params->angle > PI * 2)
 		params->angle = 0;
 	vision(params, params->angle, params->map);
@@ -48,8 +48,8 @@ void	move_backward(t_mlxk *params)
 
 void	move_right(t_mlxk *params)
 {
-	int	x;
-	int	y;
+	double	x;
+	double	y;
 
 	x = params->x0;
 	y = params->y0;
@@ -75,7 +75,7 @@ void	camera_right(t_mlxk *params)
 {
 	mlx_destroy_image(params->mlx, params->img);
 	mlx_clear_window(params->mlx, params->mlx_win);
-	params->angle -= ROTATES;
+	params->angle -= params->rotates;
 	if (params->angle < 0)
 		params->angle = PI * 2;
 	vision(params, params->angle, params->map);

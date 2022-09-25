@@ -22,10 +22,7 @@
 # define NRAY 1920
 # define PI 3.141592
 # define MOVEMENTS 10
-# define CARE 50
-# define DEGRE (0.0174533 * 60) / NRAY
-# define ROTATES (DEGRE * 80)
-# define ANGLEV (NRAY * DEGRE)/2
+# define CARE 32
 
 typedef struct s_map
 {
@@ -66,6 +63,9 @@ typedef struct mlx
 	double	xv;
 	double	yv;
 	double	xh;
+	double	degre;
+	double	rotates;
+	double	anglev;
 	double	yh;
 	int		bits_per_pixel;
 	int		line_length;
@@ -123,8 +123,8 @@ void	drawmap(t_map *map, t_mlxk *window);
 void	dda(t_mlxk *window, double angle, int i);
 void	horizantal_pixel(t_mlxk *window, double d, double y, double angle);
 void	vertical_pixel(t_mlxk *window, double d, double y, double angle);
-int		hitwall_vertical(char **table, int x1, int y1);
-int		hitwall_horizantal(char **table, int x1, int y1);
+int		hitwall_vertical(char **table, double x1, double y1);
+int		hitwall_horizantal(char **table, double x1, double y1);
 int		ft_exit(void *arg);
 void	camera_left(t_mlxk *params);
 void	move_forward(t_mlxk *params);
@@ -138,14 +138,14 @@ int		controlplayer(int key, t_mlxk *params);
 void	my_mlx_pixel_put(t_mlxk *data, int x, int y, int color);
 void	ray_to_3d(t_mlxk *window, double length, int i, double angle);
 void	horizontal_lines(double *x1, double *y1, t_mlxk *window, double angle);
-int		hitwall(t_mlxk *window, int x1, int y1, int d);
+int		hitwall(t_mlxk *window, double x1, double y1, int d);
 void	my_mlx_pixel_put(t_mlxk *data, int x, int y, int color);
 int		rgb_to_int(int opacity, int red, int green, int blue);
 void	shortdistance(double *x1, double *y1, t_mlxk *window);
 double	dbt(double x1, double y1, double x0, double y0);
 void	move_right(t_mlxk *params);
 void	move_left(t_mlxk *params);
-int		hitwall_lite(t_mlxk *window, int x1, int y1);
+int		hitwall_lite(t_mlxk *window, double x1, double y1);
 void	vertical_lines(double *x1, double *y1, t_mlxk *window, double angle);
 void	my_mlx_pixel_put1(t_mlxk *data, int x, int y, int color);
 void	my_mlx_pixel_put2(t_mlxk *data, int x, int y, int color);

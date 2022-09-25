@@ -117,6 +117,9 @@ void	initialize(t_mlxk *window, t_map *map)
 	window->up = 0;
 	window->table = map->table;
 	window->map = map;
+	window->degre = (0.0174533 * 60) / NRAY;
+	window->rotates = window->degre * 80;
+	window->anglev = (NRAY * window->degre)/2;
 	window->mx = window->screenx / 2;
 	window->mlx = mlx_init();
 	window->mlx_win = mlx_new_window(window->mlx, window->screenx, window->screeny, "TBC (The best cub3d)");
@@ -126,7 +129,6 @@ int	main(int ac, char **av)
 {
 	t_mlxk	window;
 	t_map 	*map;
-
 
 	map = malloc(sizeof(t_map) * 1);
 	put_values(map);

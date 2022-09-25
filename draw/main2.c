@@ -37,9 +37,9 @@ void	sky_and_floor(t_mlxk *window)
 
 void	playerpositon(t_mlxk *window)
 {
-	int	i;
-	int	y;
-	int	x;
+	double	i;
+	double	y;
+	int		x;
 
 	i = window->x0 - 1;
 	while (++i < window->x0 + 10)
@@ -61,7 +61,7 @@ void	vision(t_mlxk *window, double angle, t_map *map)
 {
 	int	i;
 
-	angle -= ANGLEV;
+	angle -= window->anglev;
 	if (angle < 0)
 		angle = (PI * 2) + angle;
 	window->img = mlx_new_image(window->mlx, window->screenx, window->screeny);
@@ -73,9 +73,9 @@ void	vision(t_mlxk *window, double angle, t_map *map)
 	while (++i < NRAY)
 	{
 		dda(window, angle, i);
-		angle += DEGRE;
+		angle += window->degre;
 		if (angle > PI * 2)
-			angle = DEGRE;
+			angle = window->degre;
 	}
 	drawmap(map, window);
 	playerpositon(window);
@@ -99,28 +99,16 @@ void	dda(t_mlxk *window, double angle, int i)
 
 int	usemouse(int x, int y, t_mlxk *params)
 {
+	my_mlx_pixel_put(params, x, y, 16777215);
 	if (x > 0 && x < params->screenx && y < params->screeny && y > 0)
 	{
-		if (x <= params->mx)
-		{
-			mlx_destroy_image(params->mlx, params->img);
-			mlx_clear_window(params->mlx, params->mlx_win);
-			params->angle -= ROTATES;
-			if (params->angle < 0)
-				params->angle = PI * 2;
-			vision(params, params->angle, params->map);
-			params->mx = x;
-		}
+		if (x <= params->screenx / 2)
+			camera_left(params);
 		else
-		{
-			mlx_destroy_image(params->mlx, params->img);
-			mlx_clear_window(params->mlx, params->mlx_win);
-			params->angle += ROTATES;
-			if (params->angle > PI * 2)
-				params->angle = 0;
-			vision(params, params->angle, params->map);
-			params->mx = x;
-		}
+			camera_right(params);
+		mlx_destroy_image(params->mlx, params->img);
+		mlx_clear_window(params->mlx, params->mlx_win);
+		vision(params, params->angle, params->map);
 	}
 	return (0);
 }

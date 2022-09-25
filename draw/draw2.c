@@ -74,9 +74,9 @@ void	ray_to_3d(t_mlxk *window, double length, int i, double angle)
 
 	d = 0;
 	if (i <= (NRAY / 2) - 1)
-		length *= cos(ANGLEV - (((i % (NRAY / 2)) * DEGRE)));
+		length *= cos(window->anglev - (((i % (NRAY / 2)) * window->degre)));
 	else if (i >= (NRAY / 2))
-		length *= cos((i % (NRAY / 2)) * DEGRE);
+		length *= cos((i % (NRAY / 2)) * window->degre);
 	lineh = 50 * window->screeny / length;
 	y = (window->screeny + window->up - lineh) / 2;
 	window->kb += 1;
@@ -88,7 +88,7 @@ void	ray_to_3d(t_mlxk *window, double length, int i, double angle)
 		else if (window->length == dbt(window->xv,
 				window->yv, window->x0, window->y0))
 			vertical_pixel(window, d, y, angle);
-		d += (32.00000 / lineh);
+		d += ((double)CARE / lineh);
 		y++;
 	}
 }

@@ -12,32 +12,33 @@
 
 #include "../cub3D.h"
 
-int	hitwall_horizantal(char **table, int x1, int y1)
+int	hitwall_horizantal(char **table, double x1, double y1)
 {
-	int	i;
-	int	j;
+	double	i;
+	double	j;
 
 	i = y1 / CARE;
 	j = x1 / CARE;
 	if (i >= ft_strlen_2(table) || i < 0)
 		return (1);
-	if (j >= ft_strlen(table[i]) || j < 0)
+	if (j >= ft_strlen(table[(int)i]) || j < 0)
 		return (1);
 	if (x1 < 0 || y1 < 0)
 		return (1);
-	if (table[i][j] == '1' || (i > 0 && table[i - 1][j] == '1'))
+	if (table[(int)i][(int)j] == '1'
+		|| (i > 0 && table[(int)i - 1][(int)j] == '1'))
 		return (1);
 	return (0);
 }
 
-int	hitwall(t_mlxk *window, int x1, int y1, int d)
+int	hitwall(t_mlxk *window, double x1, double y1, int d)
 {
 	int	k;
 
-	k = MOVEMENTS - 2;
+	k = MOVEMENTS;
 	if (y1 / CARE >= ft_strlen_2(window->table) || y1 / CARE < 0)
 		return (1);
-	if (x1 / CARE >= ft_strlen(window->table[y1 / CARE]) || x1 / CARE < 0)
+	if (x1 / CARE >= ft_strlen(window->table[(int)y1 / CARE]) || x1 / CARE < 0)
 		return (1);
 	if (x1 < 0 || y1 < 0)
 		return (1);
@@ -53,44 +54,45 @@ int	hitwall(t_mlxk *window, int x1, int y1, int d)
 			x1 += k * cos(window->angle);
 			y1 += k * sin(window->angle);
 		}
-		if (window->table[y1 / CARE][x1 / CARE] == '1')
+		if (window->table[(int)y1 / CARE][(int)x1 / CARE] == '1')
 			return (1);
 	}
 	return (0);
 }
 
-int	hitwall_lite(t_mlxk *window, int x1, int y1)
+int	hitwall_lite(t_mlxk *window, double x1, double y1)
 {
-	int	i;
-	int	j;
+	double	i;
+	double	j;
 
 	i = y1 / CARE;
 	j = x1 / CARE;
 	if (i >= ft_strlen_2(window->table) || i < 0)
 		return (1);
-	if (j >= ft_strlen(window->table[i]) || j < 0)
+	if (j >= ft_strlen(window->table[(int)i]) || j < 0)
 		return (1);
 	if (x1 < 0 || y1 < 0)
 		return (1);
-	if (window->table[i][j] == '1')
+	if (window->table[(int)i][(int)j] == '1')
 		return (1);
 	return (0);
 }
 
-int	hitwall_vertical(char **table, int x1, int y1)
+int	hitwall_vertical(char **table, double x1, double y1)
 {
-	int	i;
-	int	j;
+	double	i;
+	double	j;
 
 	i = y1 / CARE;
 	j = x1 / CARE;
 	if (i >= ft_strlen_2(table) || i < 0)
 		return (1);
-	if (j >= ft_strlen(table[i]) || j < 0)
+	if (j >= ft_strlen(table[(int)i]) || j < 0)
 		return (1);
 	if (x1 < 0 || y1 < 0)
 		return (1);
-	if (table[i][j] == '1' || (j > 0 && table[i][j - 1] == '1'))
+	if (table[(int)i][(int)j] == '1'
+		|| (j > 0 && table[(int)i][(int)j - 1] == '1'))
 		return (1);
 	return (0);
 }

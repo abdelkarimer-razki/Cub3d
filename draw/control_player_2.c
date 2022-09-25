@@ -34,8 +34,8 @@ void	camera_down(t_mlxk *params)
 
 void	move_left(t_mlxk *params)
 {
-	int	x;
-	int	y;
+	double	x;
+	double	y;
 
 	x = params->x0;
 	y = params->y0;
