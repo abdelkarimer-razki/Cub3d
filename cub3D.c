@@ -132,13 +132,11 @@ int	main(int ac, char **av)
 	put_values(map);
     check_exten(av[1], ac);
 	parsing(av[1], map);
-	//print_table(map->table);
 	player_position(map->table, &window);
 	initialize(&window, map);
  	vision(&window, window.angle, map);
-	//person(&window);
 	mlx_hook(window.mlx_win, 2, 0, &controlplayer, &window);
-	//mlx_hook(window.mlx_win, 6, 0, &usemouse, &window);
+	mlx_hook(window.mlx_win, 6, 0, &usemouse, &window);
 	mlx_hook(window.mlx_win, 17, 0, &ft_exit, &window);
 	mlx_loop(window.mlx);
 	free_all(map);

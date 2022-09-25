@@ -92,3 +92,29 @@ void	ray_to_3d(t_mlxk *window, double length, int i, double angle)
 		y++;
 	}
 }
+
+void	drawmap(t_map *map, t_mlxk *window)
+{
+	int	i;
+	int	j;
+	int	c;
+
+	i = -1;
+	while (map->table[++i])
+	{
+		j = -1;
+		while (map->table[i][++j])
+		{
+			c = (j * CARE) - 1;
+			if (map->table[i][j] == '1'
+				|| (i > 0 && map->table[i - 1][j] == '1'))
+				while (++c < (j + 1) * CARE)
+					my_mlx_pixel_put2(window, c, i * CARE, 16776960);
+			c = (i * CARE) - 1;
+			if (map->table[i][j] == '1'
+				|| (j > 0 && map->table[i][j - 1] == '1'))
+				while (++c < (i + 1) * CARE)
+					my_mlx_pixel_put2(window, j * CARE, c, 16776960);
+		}
+	}
+}
