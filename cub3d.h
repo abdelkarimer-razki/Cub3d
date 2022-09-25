@@ -133,7 +133,6 @@ void	camera_right(t_mlxk *params);
 void	camera_up(t_mlxk *params);
 void	camera_down(t_mlxk *params);
 void	vision(t_mlxk *window, double angle, t_map *map);
-int		usemouse(int x, int y, t_mlxk *params);
 int		controlplayer(int key, t_mlxk *params);
 void	my_mlx_pixel_put(t_mlxk *data, int x, int y, int color);
 void	ray_to_3d(t_mlxk *window, double length, int i, double angle);

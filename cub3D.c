@@ -138,7 +138,6 @@ int	main(int ac, char **av)
 	initialize(&window, map);
  	vision(&window, window.angle, map);
 	mlx_hook(window.mlx_win, 2, 0, &controlplayer, &window);
-	mlx_hook(window.mlx_win, 6, 0, &usemouse, &window);
 	mlx_hook(window.mlx_win, 17, 0, &ft_exit, &window);
 	mlx_loop(window.mlx);
 	free_all(map);

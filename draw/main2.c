@@ -96,19 +96,3 @@ void	dda(t_mlxk *window, double angle, int i)
 	shortdistance(&x1, &y1, window);
 	ray_to_3d(window, dbt(x1, y1, x0, y0), i, angle);
 }
-
-int	usemouse(int x, int y, t_mlxk *params)
-{
-	my_mlx_pixel_put(params, x, y, 16777215);
-	if (x > 0 && x < params->screenx && y < params->screeny && y > 0)
-	{
-		if (x <= params->screenx / 2)
-			camera_left(params);
-		else
-			camera_right(params);
-		mlx_destroy_image(params->mlx, params->img);
-		mlx_clear_window(params->mlx, params->mlx_win);
-		vision(params, params->angle, params->map);
-	}
-	return (0);
-}
