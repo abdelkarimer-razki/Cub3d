@@ -15,21 +15,19 @@
 void	camera_up(t_mlxk *params)
 {
 	mlx_destroy_image(params->mlx, params->img);
-	mlx_clear_window(params->mlx, params->mlx_win);
 	params->up += 30 * 2;
-	if (params->screeny + params->up > 1700)
+	if (SCREENY + params->up > SCREENY + 500)
 		params->up -= 30 * 2;
-	vision(params, params->angle, params->map);
+	vision(params, params->angle);
 }
 
 void	camera_down(t_mlxk *params)
 {
 	mlx_destroy_image(params->mlx, params->img);
-	mlx_clear_window(params->mlx, params->mlx_win);
 	params->up -= 30 * 2;
-	if (params->screeny + params->up < 1080)
+	if (SCREENY + params->up < SCREENY)
 		params->up += 30 * 2;
-	vision(params, params->angle, params->map);
+	vision(params, params->angle);
 }
 
 void	move_left(t_mlxk *params)
@@ -50,10 +48,9 @@ void	move_left(t_mlxk *params)
 	if (hitwall_lite(params, x, y) != 1)
 	{
 		mlx_destroy_image(params->mlx, params->img);
-		mlx_clear_window(params->mlx, params->mlx_win);
 		params->x0 = x;
 		params->y0 = y;
-		vision(params, params->angle, params->map);
+		vision(params, params->angle);
 	}
 }
 

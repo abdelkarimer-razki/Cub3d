@@ -6,23 +6,11 @@
 /*   By: bboulhan <bboulhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 17:25:49 by bboulhan          #+#    #+#             */
-/*   Updated: 2022/09/22 15:24:14 by bboulhan         ###   ########.fr       */
+/*   Updated: 2022/09/25 18:55:22 by bboulhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3D.h"
-
-int	ft_strlen_2(char **s)
-{
-	int	i;
-
-	i = 0;
-	if (s == NULL)
-		return (i);
-	while (s[i] != NULL)
-		i++;
-	return (i);
-}
 
 char	*ft_strrchr(const char *s, int c)
 {
@@ -50,7 +38,7 @@ char	*ft_strrchr(const char *s, int c)
 
 int	ft_strncmp(const char *s1, const char *s2, int n)
 {
-	int			i;
+	int				i;
 	unsigned char	*x;
 	unsigned char	*y;
 
@@ -112,7 +100,7 @@ char	*add_char(char *str, char c)
 
 char	*short_get_next_line(int fd)
 {
-    char    buff[1];
+	char	buff[1];
 	char	*line;
 
 	if (fd < 0)

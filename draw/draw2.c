@@ -12,22 +12,24 @@
 
 #include "../cub3D.h"
 
-void	vertical_lines(double *x1, double *y1, t_mlxk *window, double angle)
+void	vertical_lines(t_mlxk *window, double angle)
 {
 	double	x0;
 	double	y0;
 	double	sy;
+	double	tana;
 
+	tana = tan(angle);
 	x0 = (int)(window->x0 / CARE) * CARE;
 	if (angle < PI / 2 || angle > 1.5 * PI)
 		x0 += CARE;
-	y0 = window->y0 + tan(angle) * (x0 - window->x0);
-	sy = tan(angle) * CARE;
+	y0 = window->y0 + tana * (x0 - window->x0);
+	sy = tana * CARE;
 	if (angle < PI && angle > 0 && sy < 0)
 		sy *= -1;
 	else if (!(angle < PI && angle > 0) && sy > 0)
 		sy *= -1;
-	while (hitwall_vertical(window->table, x0, y0) == 0)
+	while (hitwall_vertical(window->map->table, x0, y0, window->tl) == 0)
 	{
 		if (angle < PI / 2 || angle > 1.5 * PI)
 			x0 += CARE;
@@ -35,26 +37,28 @@ void	vertical_lines(double *x1, double *y1, t_mlxk *window, double angle)
 			x0 -= CARE;
 		y0 += sy;
 	}
-	(*x1) = x0;
-	(*y1) = y0;
+	window->xv = x0;
+	window->yv = y0;
 }
 
-void	horizontal_lines(double *x1, double *y1, t_mlxk *window, double angle)
+void	horizontal_lines(t_mlxk *window, double angle)
 {
 	double	x0;
 	double	y0;
 	double	sx;
+	double	tana;
 
+	tana = tan(angle);
 	y0 = (int)(window->y0 / CARE) * CARE;
 	if (angle < PI && angle > 0)
 		y0 += CARE;
-	x0 = window->x0 + ((y0 - window->y0) / tan(angle));
-	sx = CARE / tan(angle);
+	x0 = window->x0 + ((y0 - window->y0) / tana);
+	sx = CARE / tana;
 	if (!(angle < PI / 2 || angle > 1.5 * PI) && sx > 0)
 		sx *= -1;
 	else if ((angle < PI / 2 || angle > 1.5 * PI) && sx < 0)
 		sx *= -1;
-	while (hitwall_horizantal(window->table, x0, y0) == 0)
+	while (hitwall_horizantal(window->map->table, x0, y0, window->tl) == 0)
 	{
 		if (angle < PI && angle > 0)
 			y0 += CARE;
@@ -62,8 +66,8 @@ void	horizontal_lines(double *x1, double *y1, t_mlxk *window, double angle)
 			y0 -= CARE;
 		x0 += sx;
 	}
-	(*x1) = x0;
-	(*y1) = y0;
+	window->xh = x0;
+	window->yh = y0;
 }
 
 void	ray_to_3d(t_mlxk *window, double length, int i, double angle)
@@ -73,14 +77,14 @@ void	ray_to_3d(t_mlxk *window, double length, int i, double angle)
 	double	d;
 
 	d = 0;
-	if (i <= (NRAY / 2) - 1)
-		length *= cos(window->anglev - (((i % (NRAY / 2)) * window->degre)));
-	else if (i >= (NRAY / 2))
-		length *= cos((i % (NRAY / 2)) * window->degre);
-	lineh = 50 * window->screeny / length;
-	y = (window->screeny + window->up - lineh) / 2;
+	if (i <= (SCREENX / 2) - 1)
+		length *= cos(window->anglev - (((i % (SCREENX / 2)) * window->degre)));
+	else if (i >= (SCREENX / 2))
+		length *= cos((i % (SCREENX / 2)) * window->degre);
+	lineh = 50 * SCREENY / length;
+	y = (SCREENY + window->up - lineh) / 2;
 	window->kb += 1;
-	while ((int)y < lineh + (window->screeny + window->up - lineh) / 2)
+	while ((int)y < lineh + (SCREENY + window->up - lineh) / 2)
 	{
 		if (window->length == dbt(window->xh,
 				window->yh, window->x0, window->y0))
@@ -93,26 +97,26 @@ void	ray_to_3d(t_mlxk *window, double length, int i, double angle)
 	}
 }
 
-void	drawmap(t_map *map, t_mlxk *window)
+void	drawmap(t_mlxk *window)
 {
 	int	i;
 	int	j;
 	int	c;
 
 	i = -1;
-	while (map->table[++i])
+	while (window->map->table[++i])
 	{
 		j = -1;
-		while (map->table[i][++j])
+		while (window->map->table[i][++j])
 		{
 			c = (j * CARE) - 1;
-			if (map->table[i][j] == '1'
-				|| (i > 0 && map->table[i - 1][j] == '1'))
+			if (window->map->table[i][j] == '1'
+				|| (i > 0 && window->map->table[i - 1][j] == '1'))
 				while (++c < (j + 1) * CARE)
 					my_mlx_pixel_put2(window, c, i * CARE, 16776960);
 			c = (i * CARE) - 1;
-			if (map->table[i][j] == '1'
-				|| (j > 0 && map->table[i][j - 1] == '1'))
+			if (window->map->table[i][j] == '1'
+				|| (j > 0 && window->map->table[i][j - 1] == '1'))
 				while (++c < (i + 1) * CARE)
 					my_mlx_pixel_put2(window, j * CARE, c, 16776960);
 		}

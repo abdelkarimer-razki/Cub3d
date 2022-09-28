@@ -6,7 +6,7 @@
 /*   By: bboulhan <bboulhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 18:13:37 by bboulhan          #+#    #+#             */
-/*   Updated: 2022/09/22 15:24:14 by bboulhan         ###   ########.fr       */
+/*   Updated: 2022/09/25 18:55:40 by bboulhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ int	ft_strlen(const char *s)
 {
 	int	i;
 
-	//printf("%s\n", s);
 	if (s == NULL)
 		return (0);
 	i = 0;
@@ -86,4 +85,22 @@ int	ft_atoi(const char *str)
 		c++;
 	}
 	return ((int)(k * m));
+}
+
+void	remove_space(char *line)
+{
+	int	i;
+
+	i = ft_strlen(line);
+	if (line[i - 1] == ' ')
+	{
+		while (--i > 0)
+		{
+			if (line[i] != ' ')
+			{
+				line[i + 1] = 0;
+				break ;
+			}
+		}
+	}
 }

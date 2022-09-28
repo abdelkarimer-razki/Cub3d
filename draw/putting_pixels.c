@@ -18,7 +18,7 @@ void	my_mlx_pixel_put1(t_mlxk *data, int x, int y, int color)
 
 	x /= 5;
 	y /= 5;
-	if ((x > 0 && x < data->screenx) && (y > 0 && y < data->screeny))
+	if ((x > 0 && x < SCREENX) && (y > 0 && y < SCREENY))
 	{
 		x = x - ((data->x0 / 5) - 130);
 		y = y - ((data->y0 / 5) - 130);
@@ -49,7 +49,7 @@ void	my_mlx_pixel_put(t_mlxk *data, int x, int y, int color)
 {
 	char	*dst;
 
-	if ((x > 0 && x < data->screenx) && (y > 0 && y < data->screeny))
+	if ((x > 0 && x < SCREENX) && (y > 0 && y < SCREENY))
 	{
 		dst = data->addr + (y * data->line_length
 				+ x * (data->bits_per_pixel / 8));

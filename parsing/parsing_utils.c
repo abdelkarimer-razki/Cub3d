@@ -6,7 +6,7 @@
 /*   By: bboulhan <bboulhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 13:01:44 by bboulhan          #+#    #+#             */
-/*   Updated: 2022/09/22 20:52:01 by bboulhan         ###   ########.fr       */
+/*   Updated: 2022/09/25 19:21:34 by bboulhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,8 @@ int	check_last_elem(char *line)
 		else if (line[i] == ' ')
 			x++;
 	}
-	if (x + j > i / 2)
-	{
-		if (x + j == i - 1)
-			return (1);
-		else
-			return (-1);
-	}
+	if (x + j >= i - 1 && j > 0)
+		return (1);
 	return (0);
 }
 
@@ -119,7 +114,7 @@ void	check_num(char *str)
 	k = 0;
 	while (str[++i])
 	{
-		if ((str[i] > '9' || str[i] < '0') && str[i] != ',')
+		if ((str[i] > '9' || str[i] < '0') && str[i] != ',' && str[i] != ' ')
 			j++;
 		if (str[i] == ',')
 			k++;

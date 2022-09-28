@@ -1,55 +1,22 @@
-/* ****** ******************************************************************** */
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   cub3D.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bboulhan <bboulhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/06 15:22:08 by bboulhan          #+#    #+#             */
-/*   Updated: 2022/09/07 13:30:06 by bboulhan         ###   ########.fr       */
+/*   Created: 2022/09/25 18:39:14 by bboulhan          #+#    #+#             */
+/*   Updated: 2022/09/25 20:03:45 by bboulhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
 
-void print_table(char **table)
-{
-	int i = -1;
-	while (table[++i])
-		printf("%s\n", table[i]);
-}
-
-void	person(t_mlxk *window)
-{
-	int	z;
-	int	k;
-	void *p;
-	void *m;
-
-	p = mlx_xpm_file_to_image(window->mlx, "./daj.xpm", &z, &k);
-	mlx_put_image_to_window(window->mlx, window->mlx_win, p, (window->screenx - z * 2) / 2, window->screeny - k);
-	m = mlx_xpm_file_to_image(window->mlx, "./ddaa.xpm", &z, &k);
-	mlx_put_image_to_window(window->mlx, window->mlx_win, m, (window->screenx - z / 2) / 2, window->screeny - k);
-}
-
-void	print(t_map *map)
-{
-	printf("%s\n", map->c_info);
-	printf("%s\n", map->f_info);
-	printf("%s\n", map->no_info);
-	printf("%s\n", map->so_info);
-	printf("%s\n", map->we_info);
-	printf("%s\n", map->ea_info);
-	printf("--------------\n");
-	print_table(map->table);
-}
-
-
 void	put_values(t_map *map)
 {
 	map->table = NULL;
-    map->cc = 0;
-    map->ea = 0;
+	map->cc = 0;
+	map->ea = 0;
 	map->fc = 0;
 	map->no = 0;
 	map->so = 0;
@@ -62,8 +29,7 @@ void	put_values(t_map *map)
 	map->we_info = NULL;
 }
 
-
-void	free_all(t_map *map) 
+void	free_all(t_map *map)
 {
 	ft_free(map->table);
 	free(map->c_info);
@@ -90,7 +56,8 @@ void	player_position(char **table, t_mlxk *window)
 		j = -1;
 		while (table[i][++j])
 		{
-			if (table[i][j] == 'N' || table[i][j] == 'S' || table[i][j] == 'W' || table[i][j] == 'E')
+			if (table[i][j] == 'N' || table[i][j] == 'S'
+				|| table[i][j] == 'W' || table[i][j] == 'E')
 			{
 				window->x0 = j * CARE - (CARE / 2);
 				window->y0 = i * CARE - (CARE / 2);
@@ -102,7 +69,6 @@ void	player_position(char **table, t_mlxk *window)
 					window->angle = 0;
 				else if (table[i][j] == 'W')
 					window->angle = PI;
-				break ;
 			}
 		}
 	}
@@ -111,35 +77,32 @@ void	player_position(char **table, t_mlxk *window)
 void	initialize(t_mlxk *window, t_map *map)
 {
 	window->kb = 0;
-	window->rest = 500;
-	window->screenx = 1920;
-	window->screeny = 1080;
 	window->up = 0;
-	window->table = map->table;
 	window->map = map;
-	window->degre = (0.0174533 * 60) / NRAY;
+	window->degre = (0.0174533 * 60) / SCREENX;
 	window->rotates = window->degre * 80;
-	window->anglev = (NRAY * window->degre)/2;
-	window->mx = window->screenx / 2;
+	window->anglev = (SCREENX * window->degre) / 2;
 	window->mlx = mlx_init();
-	window->mlx_win = mlx_new_window(window->mlx, window->screenx, window->screeny, "TBC (The best cub3d)");
+	window->mlx_win = mlx_new_window(window->mlx, SCREENX,
+			SCREENY, "TBC (The best cub3d)");
 }
 
 int	main(int ac, char **av)
 {
 	t_mlxk	window;
-	t_map 	*map;
+	t_map	*map;
 
 	map = malloc(sizeof(t_map) * 1);
 	put_values(map);
-    check_exten(av[1], ac);
+	check_exten(av[1], ac);
 	parsing(av[1], map);
 	player_position(map->table, &window);
 	initialize(&window, map);
- 	vision(&window, window.angle, map);
+	window.tl = ft_strlen_2(map->table);
+	vision(&window, window.angle);
 	mlx_hook(window.mlx_win, 2, 0, &controlplayer, &window);
-	mlx_hook(window.mlx_win, 17, 0, &ft_exit, &window);
+	mlx_hook(window.mlx_win, 17, 0, &ft_exit, NULL);
 	mlx_loop(window.mlx);
 	free_all(map);
-	return 0;
+	return (0);
 }

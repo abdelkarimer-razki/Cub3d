@@ -6,7 +6,7 @@
 /*   By: bboulhan <bboulhan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/06 15:35:06 by bboulhan          #+#    #+#             */
-/*   Updated: 2022/09/23 14:23:26 by bboulhan         ###   ########.fr       */
+/*   Updated: 2022/09/25 19:24:17 by bboulhan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,8 @@ void	parsing(char *path, t_map *map)
 	line = short_get_next_line(fd);
 	while (line)
 	{
+		line = ft_strtrim(line, " ");
+		line = ft_strtrim(line, "\t");
 		check_elem(line, map);
 		check_info(line, map);
 		free(line);
@@ -112,7 +114,7 @@ void	parsing(char *path, t_map *map)
 	if (map->cc != 1 || map->ea != 1 || map->fc != 1
 		|| map->no != 1 || map->so != 1 || map->we != 1)
 		ft_error(2);
+	close(fd);
 	set_the_map(path, map);
 	map_checker(map);
-	close(fd);
 }

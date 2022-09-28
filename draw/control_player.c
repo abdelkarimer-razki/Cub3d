@@ -15,35 +15,32 @@
 void	camera_left(t_mlxk *params)
 {
 	mlx_destroy_image(params->mlx, params->img);
-	mlx_clear_window(params->mlx, params->mlx_win);
 	params->angle += params->rotates;
 	if (params->angle > PI * 2)
 		params->angle = 0;
-	vision(params, params->angle, params->map);
+	vision(params, params->angle);
 }
 
 void	move_forward(t_mlxk *params)
 {
 	mlx_destroy_image(params->mlx, params->img);
-	mlx_clear_window(params->mlx, params->mlx_win);
 	if (hitwall(params, params->x0, params->y0, 1) == 0)
 	{
 		params->y0 += MOVEMENTS * sin(params->angle);
 		params->x0 += MOVEMENTS * cos(params->angle);
 	}
-	vision(params, params->angle, params->map);
+	vision(params, params->angle);
 }
 
 void	move_backward(t_mlxk *params)
 {
 	mlx_destroy_image(params->mlx, params->img);
-	mlx_clear_window(params->mlx, params->mlx_win);
-	if (hitwall(params, params->x0, params->y0, 0) == 0)
+	if (hitwall(params, params->x0, params->y0, -1) == 0)
 	{
 		params->y0 -= MOVEMENTS * sin(params->angle);
 		params->x0 -= MOVEMENTS * cos(params->angle);
 	}
-	vision(params, params->angle, params->map);
+	vision(params, params->angle);
 }
 
 void	move_right(t_mlxk *params)
@@ -64,19 +61,17 @@ void	move_right(t_mlxk *params)
 	if (hitwall_lite(params, x, y) != 1)
 	{
 		mlx_destroy_image(params->mlx, params->img);
-		mlx_clear_window(params->mlx, params->mlx_win);
 		params->x0 = x;
 		params->y0 = y;
-		vision(params, params->angle, params->map);
+		vision(params, params->angle);
 	}
 }
 
 void	camera_right(t_mlxk *params)
 {
 	mlx_destroy_image(params->mlx, params->img);
-	mlx_clear_window(params->mlx, params->mlx_win);
 	params->angle -= params->rotates;
 	if (params->angle < 0)
 		params->angle = PI * 2;
-	vision(params, params->angle, params->map);
+	vision(params, params->angle);
 }

@@ -16,26 +16,41 @@ double	dbt(double x1, double y1, double x0, double y0)
 	return (sqrt(pow(x1 - x0, 2) + pow(y1 - y0, 2)));
 }
 
+/*double	dbt(double y1, double y0, double angle)
+{
+	return ((y1 - y0) / sin(angle));
+}*/
+
 int	rgb_to_int(int opacity, int red, int green, int blue)
 {
 	return ((opacity * 16777216) + (red * 65536) + (green * 256) + blue);
 }
 
-void	shortdistance(double *x1, double *y1, t_mlxk *window)
+void	shortdistance(t_mlxk *window)
 {
-	if (dbt(window->xh, window->yh, window->x0, window->y0)
-		> dbt(window->xv, window->yv, window->x0, window->y0))
-	{
-		*x1 = window->xv;
-		*y1 = window->yv;
-	}
+	double	dh;
+	double	dv;
+
+	dh = dbt(window->xh, window->yh, window->x0, window->y0);
+	dv = dbt(window->xv, window->yv, window->x0, window->y0);
+	if (dh > dv)
+		window->length = dv;
 	else
-	{
-		*x1 = window->xh;
-		*y1 = window->yh;
-	}
-	window->length = dbt(*x1, *y1, window->x0, window->y0);
+		window->length = dh;
 }
+
+/*void	shortdistance(t_mlxk *window, double angle)
+{
+	double dh;
+	double	dv;
+
+	dh = dbt(window->yh, window->y0, angle);
+	dv = dbt(window->yv, window->y0, angle);
+	if (dh > dv)
+		window->length = dv;
+	else
+		window->length = dh;
+}*/
 
 int	ft_exit(void *arg)
 {
