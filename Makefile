@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: bboulhan <bboulhan@student.42.fr>          +#+  +:+       +#+         #
+#    By: aer-razk <aer-razk@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/06 15:30:47 by bboulhan          #+#    #+#              #
-#    Updated: 2022/09/25 19:53:09 by bboulhan         ###   ########.fr        #
+#    Updated: 2022/10/30 16:01:07 by aer-razk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,6 +15,10 @@ NAME = cub3D
 CFLAGS = -Wall -Werror -Wextra -Ofast -Os 
 
 CC = cc
+
+GREEN=\033[0;32m
+
+NC=\033[0m
 
 HEADER =  cub3D.h \
 
@@ -27,19 +31,24 @@ FILES = cub3D.c ./utils/utils.c ./utils/utils_2.c ./parsing/parsing.c ./parsing/
 OBJS = $(FILES:.c=.o)
 
 %.o : %.c $(HEADER)
-	$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@
+	@clear
 
 all : $(NAME)
+	@echo "$(GREEN)✔$(NC) Compiled."
 
 $(NAME) : $(OBJS) $(HEADER)
-	$(CC) $(CFLAGS) $(OBJS) -I $(HEADER) -o $(NAME) -lmlx -framework OpenGL -framework AppKit -static-libsan -fsanitize=address
-	clear
+	@$(CC) $(CFLAGS) $(OBJS) -I $(HEADER) -o $(NAME) -lmlx -framework OpenGL -framework AppKit -static-libsan -fsanitize=address
+	@clear
 
 clean : 
-	rm -f $(OBJS)
+	@rm -f $(OBJS)
+	@clear
 
 fclean : clean
-	rm -f $(NAME) 
+	@rm -f $(NAME)
+	@clear
+	@echo "$(GREEN)✔$(NC) Cleaned."
 
 re : fclean all
 
