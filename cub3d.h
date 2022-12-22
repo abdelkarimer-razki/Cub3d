@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cub3d.h                                            :+:      :+:    :+:   */
+/*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboulhan <bboulhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aer-razk <aer-razk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/06 15:22:20 by bboulhan          #+#    #+#             */
-/*   Updated: 2022/09/25 19:52:49 by bboulhan         ###   ########.fr       */
+/*   Updated: 2022/12/22 14:47:02 by aer-razk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@
 # include <fcntl.h>
 # include "mlx.h"
 # include "math.h"
-# define SCREENX 800
-# define SCREENY 500
+# define SCREENX 1920
+# define SCREENY 1080
 # define PI 3.141592
 # define MOVEMENTS 10
 # define CARE 32
@@ -48,6 +48,13 @@ typedef struct s_map
 	int		*texture_ea;
 }	t_map;
 
+typedef struct rgb
+{
+	int red;
+	int blue;
+	int green;
+}	t_rgb;
+
 typedef struct mlx
 {
 	void	*mlx;
@@ -72,10 +79,6 @@ typedef struct mlx
 	int		up;
 	double	length;
 	int		kb;
-	int		red;
-	int		green;
-	int		blue;
-	int		screeny;
 }	t_mlxk;
 
 //utils

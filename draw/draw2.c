@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bboulhan <bboulhan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aer-razk <aer-razk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/15 18:50:10 by bboulhan          #+#    #+#             */
-/*   Updated: 2022/09/22 15:25:38 by bboulhan         ###   ########.fr       */
+/*   Updated: 2022/12/22 14:52:32 by aer-razk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	vertical_lines(t_mlxk *window, double angle)
 		sy *= -1;
 	else if (!(angle < PI && angle > 0) && sy > 0)
 		sy *= -1;
-	while (hitwall_vertical(window->map->table, x0, y0, window->tl) == 0)
+	while (!hitwall_vertical(window->map->table, x0, y0, window->tl))
 	{
 		if (angle < PI / 2 || angle > 1.5 * PI)
 			x0 += CARE;
@@ -58,7 +58,7 @@ void	horizontal_lines(t_mlxk *window, double angle)
 		sx *= -1;
 	else if ((angle < PI / 2 || angle > 1.5 * PI) && sx < 0)
 		sx *= -1;
-	while (hitwall_horizantal(window->map->table, x0, y0, window->tl) == 0)
+	while (!hitwall_horizantal(window->map->table, x0, y0, window->tl))
 	{
 		if (angle < PI && angle > 0)
 			y0 += CARE;
@@ -75,6 +75,8 @@ void	ray_to_3d(t_mlxk *window, double length, int i, double angle)
 	int		lineh;
 	double	y;
 	double	d;
+	double	pixel_step;
+	int		limit;
 
 	d = 0;
 	if (i <= (SCREENX / 2) - 1)
@@ -82,9 +84,16 @@ void	ray_to_3d(t_mlxk *window, double length, int i, double angle)
 	else if (i >= (SCREENX / 2))
 		length *= cos((i % (SCREENX / 2)) * window->degre);
 	lineh = 50 * SCREENY / length;
+	pixel_step = ((double)CARE / lineh);
+	limit = lineh + (SCREENY + window->up - lineh) / 2;
 	y = (SCREENY + window->up - lineh) / 2;
+	if (y < 0)
+	{
+		d += (pixel_step * y * -1);
+		y = 0;
+	}
 	window->kb += 1;
-	while ((int)y < lineh + (SCREENY + window->up - lineh) / 2)
+	while ((int)y < limit)
 	{
 		if (window->length == dbt(window->xh,
 				window->yh, window->x0, window->y0))
@@ -92,8 +101,10 @@ void	ray_to_3d(t_mlxk *window, double length, int i, double angle)
 		else if (window->length == dbt(window->xv,
 				window->yv, window->x0, window->y0))
 			vertical_pixel(window, d, y, angle);
-		d += ((double)CARE / lineh);
+		d += pixel_step;
 		y++;
+		if (y > SCREENY)
+			break ;
 	}
 }
 
